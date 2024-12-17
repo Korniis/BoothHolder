@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>BoothHolder.Repository</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoothHolder.Common\BoothHolder.Common.csproj" />
+    <ProjectReference Include="..\BoothHolder.Model\BoothHolder.Model.csproj" />
+  </ItemGroup>
+
+</Project>
