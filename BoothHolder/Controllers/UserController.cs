@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Serilog;
 using StackExchange.Redis;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 namespace BoothHolder.Controllers
 {
     [Route("api/[controller]/[action]")]
@@ -137,6 +138,9 @@ namespace BoothHolder.Controllers
         [HttpGet]
         public async Task<ApiResult> SendRegisterCode(string email)
         {
+            var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            if( !Regex.IsMatch(email, emailPattern)) return ApiResult.Error("请输入正确邮箱");
+
             bool isSend = await _userService.SendConfirmCode(email, false);
             Log.Information($"{email}注册邮件");
             return isSend

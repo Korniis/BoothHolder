@@ -10,7 +10,8 @@ namespace BoothHolder.IService
 {
     public interface IBoothService : IBaseService<Booth, BoothDTO>
     {
-        Task<long> Count();
+        Task<long> Count(BoothQueryParams queryParams);
         Task<List<Booth>> SelectByQuery(BoothQueryParams queryParams);
+        Task<Booth> SelectFullByIdAsync(long id);
     }
 }

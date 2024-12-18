@@ -93,7 +93,7 @@ namespace BoothHolder.Service
         {
             User newUser = _mapper.Map<User>(userRegisterDTO);
             string storedCode = await _redisDatabase.StringGetAsync(_redisPrefix + userRegisterDTO.Email);
-            if (string.IsNullOrEmpty(storedCode) || !storedCode.Equals(userRegisterDTO.ConfirmCode))
+            if (string.IsNullOrEmpty(storedCode) || !storedCode.Equals(userRegisterDTO.Code))
             {
                 return RegisterStatus.EmailWrong;
             }

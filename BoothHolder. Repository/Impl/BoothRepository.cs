@@ -17,17 +17,26 @@ namespace BoothHolder.Repository.Impl
             _db = db;
         }
 
-        public long GetCount()
+        public async Task< long> GetCount(Expression<Func<Booth, bool>> predicate)
         {
-            return _db.Queryable<Booth>().Count(it=> !it.IsDeleted);
+            return await _db.Queryable<Booth>().Where(it=> !it.IsDeleted).CountAsync(predicate);
         }
 
         public async Task<List<Booth>> SelectAllWithBrandTypeAsync(Expression<Func<Booth, bool>> predicate, int pageIndex, int pageSize)
         {
-            return await _db.Queryable<Booth>().Includes(x => x.BrandType).Where(predicate)
+            var total = await _db.Queryable<Booth>().CountAsync(predicate);
+
+
+            return await _db.Queryable<Booth>().Includes(x => x.BrandType).Where(it => !it.IsDeleted).Where(predicate)
                  .Skip(pageIndex * pageSize) // 跳过前面的记录
                   .Take(pageSize) // 获取当前页的记录
                   .ToListAsync();
+        }
+
+        public  async Task<Booth> SelectFullByIdAsync(long id)
+        {
+                  
+            return await _db.Queryable<Booth>().Includes(x=>x.BrandType).InSingleAsync(id);
         }
     }
 }

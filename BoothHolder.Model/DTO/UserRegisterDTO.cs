@@ -16,9 +16,9 @@
         [EmailAddress(ErrorMessage = "邮箱格式不正确")]
         public string Email { get; set; }
         [RegularExpression(@"^(\d+)?$", ErrorMessage = "电话号码必须是数字或为空")]
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
         [Required(ErrorMessage = "验证码无效")]
-        public string ConfirmCode { get; set; }
+        public string Code { get; set; }
     }
     public enum RegisterStatus
     {

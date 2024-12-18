@@ -10,7 +10,8 @@ namespace BoothHolder.Repository
 {
     public interface IBoothRepository : IBaseRepository<Booth>
     {
-        long GetCount();
+        Task< long> GetCount(Expression<Func<Booth, bool>> predicate);
         Task<List<Booth>> SelectAllWithBrandTypeAsync(Expression<Func<Booth, bool>> predicate, int pageIndex, int pageSize);
+        Task<Booth> SelectFullByIdAsync(long id);
     }
 }

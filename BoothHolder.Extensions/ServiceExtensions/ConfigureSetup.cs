@@ -27,10 +27,12 @@ namespace BoothHolder.Extensions.ServiceExtensions
 
             //mapper
             var config = new TypeAdapterConfig();
+            config.Default.NameMatchingStrategy(NameMatchingStrategy.IgnoreCase);
             config.NewConfig<User, UserDTO>()
             .Map(dest => dest.RoleNames, src => src.RoleList != null && src.RoleList.Any()
                     ? src.RoleList.Select(r => r.RoleName).ToList()
                     : new List<string>());
+
             config.NewConfig<Booth, BoothVO>()
                 .Map(dest => dest.BrandTypeName, src => src.BrandType.BrandTypeName);
 

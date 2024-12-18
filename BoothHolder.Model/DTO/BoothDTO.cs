@@ -17,7 +17,7 @@
     {
         public string? BoothName { get; set; }  // 可为空
         public string? Location { get; set; }    // 可为空
-        public string? BrandType { get; set; }   // 可为空
+        public int? BrandType { get; set; }   // 可为空
 
         public bool IsAvailable { get; set; } = false;
         public bool IsDesc { get; set; } = false;

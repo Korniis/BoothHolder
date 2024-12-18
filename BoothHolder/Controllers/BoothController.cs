@@ -17,7 +17,7 @@ namespace BoothHolder.Controllers
         private readonly IBoothService _boothService;
 
         private readonly IMapper _mapper;
-        
+
         public BoothController(IBaseService<Booth, BoothDTO> baseService, IMapper mapper, IBoothService boothService)
         {
             _baseService = baseService;
@@ -34,13 +34,20 @@ namespace BoothHolder.Controllers
         {
 
 
-          List<Booth>  booths=   await  _boothService.SelectByQuery(queryParams);
-            var total = await _boothService.Count();
+            List<Booth> booths = await _boothService.SelectByQuery(queryParams);
+            var total = await _boothService.Count(queryParams);
 
-           var page=  _mapper.Map<List<BoothVO>>(booths);
-            return ApiResult.Success( new { total, queryParams.PageIndex,queryParams.PageSize , page });
+            var page = _mapper.Map<List<BoothVO>>(booths);
+            return ApiResult.Success(new { total, queryParams.PageIndex, queryParams.PageSize, page });
         }
+        [HttpGet("{id}")]
+        public async Task<ApiResult> Get(long id)
+        {
 
+            var booth= await   _boothService.SelectFullByIdAsync(id);
+            return ApiResult.Success( booth );
+          
+        }
 
         [HttpPost]
         public async Task<ApiResult> CreateBooth([FromBody] BoothDTO booth)
