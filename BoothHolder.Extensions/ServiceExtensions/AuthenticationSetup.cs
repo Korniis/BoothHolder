@@ -18,6 +18,8 @@ namespace BoothHolder.Extensions.ServiceExtensions
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 
+
+
                 // 添加Bearer认证  
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

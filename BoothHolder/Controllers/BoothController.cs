@@ -3,8 +3,8 @@ using BoothHolder.IService;
 using BoothHolder.Model.DTO;
 using BoothHolder.Model.Entity;
 using BoothHolder.Model.VO;
-using BoothHolder.Service;
 using MapsterMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BoothHolder.Controllers
@@ -38,18 +38,23 @@ namespace BoothHolder.Controllers
             var total = await _boothService.Count(queryParams);
 
             var page = _mapper.Map<List<BoothVO>>(booths);
+            if (page == null)
+                return ApiResult.Error("没有找到");
             return ApiResult.Success(new { total, queryParams.PageIndex, queryParams.PageSize, page });
         }
         [HttpGet("{id}")]
         public async Task<ApiResult> Get(long id)
         {
+            var booth = await _boothService.SelectFullByIdAsync(id);
 
-            var booth= await   _boothService.SelectFullByIdAsync(id);
-            return ApiResult.Success( booth );
-          
+            if (booth == null)
+                return ApiResult.Error("没有找到");
+            return ApiResult.Success(booth);
+
         }
 
         [HttpPost]
+        [Authorize(Roles="Admin")]
         public async Task<ApiResult> CreateBooth([FromBody] BoothDTO booth)
         {
             if (booth == null)
@@ -63,6 +68,35 @@ namespace BoothHolder.Controllers
 
             return ApiResult.Success("成功创建");
         }
+
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<ApiResult> UpdateBooth([FromBody] BoothDTO booth)
+        {
+            if (booth == null)
+            {
+                return ApiResult.Error("");
+            }
+
+        if( await _boothService.UpdateBoothAsync(booth))
+             return ApiResult.Success("成功创建");
+        else
+                return ApiResult.Error("更新错误");
+        }
+
+        [HttpDelete]
+        [Authorize(Roles = "Admin")]
+        public async Task<ApiResult> DeleteBooth(long id)
+        {
+
+
+            if (await _boothService.DeleteBoothAsync(id))
+                return ApiResult.Success("成功创建");
+            else
+                return ApiResult.Error("更新错误");
+        }
+    }
 
         //[HttpGet]
         //[Authorize]
@@ -145,5 +179,5 @@ namespace BoothHolder.Controllers
         //    }
         //}).ExecuteCommand();
         //}
-    }
+    
 }

@@ -27,7 +27,8 @@
 		<PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
 		<PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
-		
+		<PackageReference Include="Swashbukle.AspNetCore.Newtonsoft" Version="2.0.0" />
+		<PackageReference Include="Tencent.QCloud.Cos.Sdk" Version="5.4.*" />
 	</ItemGroup>
 
 

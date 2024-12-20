@@ -135,5 +135,38 @@ namespace BoothHolder.Service
             return await _redisDatabase.StringSetAsync(_redisPrefix + email, code, TimeSpan.FromMinutes(3)) ? true : false;
             //   return await SMTPHelper.UseSmtpAsync(email, "hajimi", $"验证码:{code}")? true: false;
         }
+
+        public async Task<bool> SetAvatar(int userId, string avatarurl)
+        {
+            var user = await _baseRepository.SelectOneByIdAsync(userId);
+
+            user.AvatarUrl = avatarurl;
+            user.UpdatedTime = DateTime.Now;
+            return await _baseRepository.UpdateAsync(user);
+
+        }
+
+        public async Task<bool> UpdateUserAsync(UserDTO userDTO,long id)
+        {
+            var  user = await  _baseRepository.SelectOneByIdAsync(id);
+
+            if (!string.IsNullOrEmpty(userDTO.UserName)) 
+            {
+                user.UserName=userDTO.UserName;
+            }
+            if (!string.IsNullOrEmpty(userDTO.Description))
+            {
+                user.Description = userDTO.Description;
+            }
+            if (!string.IsNullOrEmpty(userDTO.Phone))
+            {
+                user.Phone = userDTO.Phone;
+            }
+            user.UpdatedTime = DateTime.Now;
+            return await _baseRepository.UpdateAsync(user);
+
+
+
+        }
     }
 }

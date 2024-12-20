@@ -1,6 +1,7 @@
 ﻿
 using BoothHolder.Common;
 using BoothHolder.Common.Configration;
+using BoothHolder.Common.Oss;
 using BoothHolder.Model.DTO;
 using BoothHolder.Model.Entity;
 using BoothHolder.Model.VO;
@@ -39,6 +40,9 @@ namespace BoothHolder.Extensions.ServiceExtensions
             services.AddSingleton(config);
             services.AddScoped<IMapper, ServiceMapper>();
 
+
+            //oss
+            services.AddSingleton(UploadObject.InitCosXml());
 
         }
 

@@ -11,5 +11,7 @@ namespace BoothHolder.IService
         Task<string> GetToken(UserLoginDTO userDTO);
         Task<RegisterStatus> Register(UserRegisterDTO userRegisterDTO);
         Task<bool> SendConfirmCode(string email, bool isRemake);
+        Task<bool> SetAvatar(int userId, string avatarurl);
+        Task<bool> UpdateUserAsync(UserDTO userDTO, long userId);
     }
 }

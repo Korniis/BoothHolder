@@ -2,15 +2,9 @@
 using BoothHolder.Model.DTO;
 using BoothHolder.Model.Entity;
 using BoothHolder.Repository;
-using BoothHolder.Repository.Impl;
 using MapsterMapper;
 using SqlSugar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BoothHolder.Service
 {
@@ -40,7 +34,7 @@ namespace BoothHolder.Service
         public Task<List<Booth>> SelectByQuery(BoothQueryParams queryParams)
         {
             // 创建基本的表达式
-             var predicate = GetPredicate(queryParams);
+            var predicate = GetPredicate(queryParams);
             return _boothRepository.SelectAllWithBrandTypeAsync(predicate, queryParams.PageIndex, queryParams.PageSize);
 
 
@@ -67,6 +61,49 @@ namespace BoothHolder.Service
                 .ToExpression(); // 生成最终的表达式
             return predicate;
 
+        }
+
+        public async Task<bool> UpdateBoothAsync(BoothDTO booth)
+        {
+            if (booth.Id.HasValue)
+            {
+                // Retrieve the existing booth from the repository using the ID
+                var upbooth = await _boothRepository.SelectOneByIdAsync((long)booth.Id);
+
+                if (upbooth == null)
+                {
+                    // If the booth does not exist, return false
+                    return false;
+                }
+
+                // Update the properties of the existing booth with the data from the DTO
+                upbooth.BoothName = booth.BoothName;
+                upbooth.Location = booth.Location;
+                upbooth.BrandTypeId = (long)booth.BrandTypeId;
+                upbooth.DailyRate = booth.DailyRate;
+                upbooth.AvailableDate = booth.AvailableDate;
+                if(!string.IsNullOrEmpty(booth.MediaUrl))
+                 upbooth.MediaUrl = booth.MediaUrl;
+
+                // Save the updated booth to the repository
+                var result = await _boothRepository.UpdateAsync(upbooth);
+
+                return result; // Assuming UpdateAsync returns a boolean indicating success
+            }
+            else
+            {
+                // If the ID is not provided, return false
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteBoothAsync(long id)
+        {
+            var booth = await _boothRepository.SelectOneByIdAsync(id); ;
+
+
+            booth.IsDeleted = true;
+            return await _boothRepository.UpdateAsync(booth);
         }
     }
 }

@@ -1,11 +1,6 @@
 ﻿using BoothHolder.Model.Entity;
 using SqlSugar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BoothHolder.Repository.Impl
 {
@@ -17,9 +12,14 @@ namespace BoothHolder.Repository.Impl
             _db = db;
         }
 
-        public async Task< long> GetCount(Expression<Func<Booth, bool>> predicate)
+        public async Task<bool> DeleteBoothAsyncById(long id)
         {
-            return await _db.Queryable<Booth>().Where(it=> !it.IsDeleted).CountAsync(predicate);
+            return await _db.Deleteable<Booth>().In(id).ExecuteCommandHasChangeAsync();
+        }
+
+        public async Task<long> GetCount(Expression<Func<Booth, bool>> predicate)
+        {
+            return await _db.Queryable<Booth>().Where(it => !it.IsDeleted).CountAsync(predicate);
         }
 
         public async Task<List<Booth>> SelectAllWithBrandTypeAsync(Expression<Func<Booth, bool>> predicate, int pageIndex, int pageSize)
@@ -33,10 +33,10 @@ namespace BoothHolder.Repository.Impl
                   .ToListAsync();
         }
 
-        public  async Task<Booth> SelectFullByIdAsync(long id)
+        public async Task<Booth> SelectFullByIdAsync(long id)
         {
-                  
-            return await _db.Queryable<Booth>().Includes(x=>x.BrandType).InSingleAsync(id);
+
+            return await _db.Queryable<Booth>().Includes(x => x.BrandType).InSingleAsync(id);
         }
     }
 }

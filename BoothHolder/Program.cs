@@ -4,8 +4,6 @@ using BoothHolder.Extensions.ServiceExtensions;
 using BoothHolder.Filter;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-using System.Configuration;
-using System.Security.Policy;
 namespace BoothHolder
 {//利用某高级程序设计语言（如.NET或JAVA等）或网络开发工具（如ASP、JSP等），结合SQL Server或 MySQL等数据库知识及操作，设计一家居商场摊位招商宣介平台，具体功能模块主要包括：
  //1、信息输入、输出：能够以友好的界面形式实现摊位信息、商户信息的输入、存储、格式输出。
@@ -13,7 +11,7 @@ namespace BoothHolder
  //3、计算及统计模块，比如营业额、收益率等计算。
  //4、适当实现活动预约等其它功能。
 
-    public class Program
+    public class Program 
     {
         public static void Main(string[] args)
         {
@@ -38,7 +36,7 @@ namespace BoothHolder
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
 
             //jwt
 

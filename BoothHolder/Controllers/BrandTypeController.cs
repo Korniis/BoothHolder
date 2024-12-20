@@ -1,9 +1,7 @@
 ﻿using BoothHolder.Common.Response;
 using BoothHolder.IService;
 using BoothHolder.Model.Entity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Immutable;
 
 namespace BoothHolder.Controllers
 {
@@ -11,7 +9,7 @@ namespace BoothHolder.Controllers
     [ApiController]
     public class BrandTypeController : ControllerBase
     {
-        private readonly IBaseService<BrandType,BrandType> _baseService;
+        private readonly IBaseService<BrandType, BrandType> _baseService;
 
         public BrandTypeController(IBaseService<BrandType, BrandType> baseService)
         {
@@ -21,8 +19,8 @@ namespace BoothHolder.Controllers
         public async Task<ApiResult> Get()
         {
 
-            var types= await _baseService.SelectAllAsync();
-            return ApiResult.Success(types.Select(x=>new {x.Id,x.BrandTypeName }) );
+            var types = await _baseService.SelectAllAsync();
+            return ApiResult.Success(types.Select(x => new { x.Id, x.BrandTypeName }));
 
         }
     }

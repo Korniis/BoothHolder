@@ -17,6 +17,8 @@ namespace BoothHolder.Model.Entity
         public string PasswordHash { get; set; }  // 密码哈希值
         [SugarColumn]
         public string? AvatarUrl { get; set; }  // 密码哈希值
+        [SugarColumn(IsNullable = true)]
+        public string Description { get; set; } // 摊位描述
         [SugarColumn(Length = 20)]
         public string? Phone { get; set; }  // 联系电话
         [SugarColumn(IsNullable = false, DefaultValue = "CURRENT_TIMESTAMP")]

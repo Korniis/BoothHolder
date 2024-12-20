@@ -15,12 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoothHolder.Extensions", "B
 		{65EAB1BC-4548-419F-85E2-D507C3178AD3} = {65EAB1BC-4548-419F-85E2-D507C3178AD3}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoothHolder.Repository", "BoothHolder. Repository\BoothHolder.Repository.csproj", "{D9934B4B-487B-441D-A026-3A3265DBF8C1}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B3061A65-5F4E-4F73-99E3-CE46344506E2} = {B3061A65-5F4E-4F73-99E3-CE46344506E2}
-		{CFC90967-416B-4417-AF5E-A79A5B87030C} = {CFC90967-416B-4417-AF5E-A79A5B87030C}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoothHolder.Common", "BoothHolder.Common\BoothHolder.Common.csproj", "{B3061A65-5F4E-4F73-99E3-CE46344506E2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CFC90967-416B-4417-AF5E-A79A5B87030C} = {CFC90967-416B-4417-AF5E-A79A5B87030C}
@@ -29,7 +23,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoothHolder.Service", "BoothHolder.Service\BoothHolder.Service.csproj", "{65EAB1BC-4548-419F-85E2-D507C3178AD3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{73F974E8-8EA9-498B-8349-1D49FFA8AA75} = {73F974E8-8EA9-498B-8349-1D49FFA8AA75}
-		{D9934B4B-487B-441D-A026-3A3265DBF8C1} = {D9934B4B-487B-441D-A026-3A3265DBF8C1}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoothHolder.IService", "BoothHolder.IService\BoothHolder.IService.csproj", "{73F974E8-8EA9-498B-8349-1D49FFA8AA75}"
@@ -38,7 +31,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoothHolder.IService", "Boo
 		{CFC90967-416B-4417-AF5E-A79A5B87030C} = {CFC90967-416B-4417-AF5E-A79A5B87030C}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoothHolder.Test", "BoothHolder.Test\BoothHolder.Test.csproj", "{2EF5B301-89F0-4555-83BF-EC78D18DB342}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoothHolder.Test", "BoothHolder.Test\BoothHolder.Test.csproj", "{2EF5B301-89F0-4555-83BF-EC78D18DB342}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoothHolder.Repository", "BoothHolder.Repository\BoothHolder.Repository.csproj", "{D6B4AE9A-C88C-48EF-9D4E-2B29D886D044}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,10 +53,6 @@ Global
 		{C9B8D9FE-8078-49BC-B4B5-E1A4A2FDA180}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9B8D9FE-8078-49BC-B4B5-E1A4A2FDA180}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9B8D9FE-8078-49BC-B4B5-E1A4A2FDA180}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D9934B4B-487B-441D-A026-3A3265DBF8C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9934B4B-487B-441D-A026-3A3265DBF8C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9934B4B-487B-441D-A026-3A3265DBF8C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9934B4B-487B-441D-A026-3A3265DBF8C1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3061A65-5F4E-4F73-99E3-CE46344506E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B3061A65-5F4E-4F73-99E3-CE46344506E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3061A65-5F4E-4F73-99E3-CE46344506E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -78,6 +69,10 @@ Global
 		{2EF5B301-89F0-4555-83BF-EC78D18DB342}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EF5B301-89F0-4555-83BF-EC78D18DB342}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EF5B301-89F0-4555-83BF-EC78D18DB342}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6B4AE9A-C88C-48EF-9D4E-2B29D886D044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6B4AE9A-C88C-48EF-9D4E-2B29D886D044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6B4AE9A-C88C-48EF-9D4E-2B29D886D044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6B4AE9A-C88C-48EF-9D4E-2B29D886D044}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

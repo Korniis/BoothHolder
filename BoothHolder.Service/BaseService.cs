@@ -42,22 +42,22 @@ namespace BoothHolder.Service
         // 查询所有
         public async Task<List<TEntity>> SelectAllAsync()
         {
-            return  await _repository.SelectAllAsync();
-            
+            return await _repository.SelectAllAsync();
+
         }
 
         // 根据 ID 查询单条记录
         public async Task<TEntity> SelectOneByIdAsync(long id)
         {
-           return await _repository.SelectOneByIdAsync(id);
-           
+            return await _repository.SelectOneByIdAsync(id);
+
         }
 
         // 根据条件查询单条记录
         public async Task<TEntity> SelectOneAsync(Expression<Func<TEntity, bool>> expression)
         {
-          return await _repository.SelectOneAsync(expression);
-           
+            return await _repository.SelectOneAsync(expression);
+
         }
 
         // 根据条件查询所有记录

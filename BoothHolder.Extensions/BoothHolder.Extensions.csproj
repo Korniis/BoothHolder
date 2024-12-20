@@ -10,7 +10,7 @@
 
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\BoothHolder. Repository\BoothHolder.Repository.csproj" />
+	  <ProjectReference Include="..\BoothHolder.Repository\BoothHolder.Repository.csproj" />
 	  <ProjectReference Include="..\BoothHolder.Service\BoothHolder.Service.csproj" />
 	</ItemGroup>
 </Project>
