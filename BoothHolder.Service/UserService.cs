@@ -18,6 +18,7 @@ namespace BoothHolder.Service
         private readonly IBaseRepository<User> _baseRepository;
         private readonly IBaseRepository<Role> _roleRepository;
         private readonly IBaseRepository<UserRole> _userroleRepository;
+        private readonly IBaseRepository<EventUser> _eventUserRepository;
         private readonly IDatabase _redisDatabase;
         private readonly string _redisPrefix = "EmailVerification:";
         private readonly string _redisToken = "TokenVerification:";
@@ -27,7 +28,8 @@ namespace BoothHolder.Service
             IBaseRepository<Role> roleRepository,
             IBaseRepository<UserRole> userroleRepository,
             IMapper mapper,
-            IConnectionMultiplexer connectionMultiplexer) : base(repository, mapper) // 调用 BaseService 的构造函数
+            IConnectionMultiplexer connectionMultiplexer,
+            IBaseRepository<EventUser> eventUserRepository) : base(repository, mapper) // 调用 BaseService 的构造函数
         {
             _userResposity = userResposity;
             _roleRepository = roleRepository;
@@ -35,6 +37,7 @@ namespace BoothHolder.Service
             _baseRepository = repository;
             _userroleRepository = userroleRepository;
             _redisDatabase = connectionMultiplexer.GetDatabase();
+            _eventUserRepository = eventUserRepository;
         }
         public async Task<List<RoleDTO>> GetRoles()
         {
@@ -146,13 +149,13 @@ namespace BoothHolder.Service
 
         }
 
-        public async Task<bool> UpdateUserAsync(UserDTO userDTO,long id)
+        public async Task<bool> UpdateUserAsync(UserDTO userDTO, long id)
         {
-            var  user = await  _baseRepository.SelectOneByIdAsync(id);
+            var user = await _baseRepository.SelectOneByIdAsync(id);
 
-            if (!string.IsNullOrEmpty(userDTO.UserName)) 
+            if (!string.IsNullOrEmpty(userDTO.UserName))
             {
-                user.UserName=userDTO.UserName;
+                user.UserName = userDTO.UserName;
             }
             if (!string.IsNullOrEmpty(userDTO.Description))
             {
@@ -166,6 +169,15 @@ namespace BoothHolder.Service
             return await _baseRepository.UpdateAsync(user);
 
 
+
+        }
+
+        public async Task<bool> AddEvevt(int userId, long evevtId)
+        {
+            EventUser eventUser = new EventUser();
+            eventUser.EventID = evevtId;
+            eventUser.UserID = userId;
+            return await _eventUserRepository.CreateAsync(eventUser) != 0 ? true : false;
 
         }
     }

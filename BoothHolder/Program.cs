@@ -11,7 +11,7 @@ namespace BoothHolder
  //3、计算及统计模块，比如营业额、收益率等计算。
  //4、适当实现活动预约等其它功能。
 
-    public class Program 
+    public class Program
     {
         public static void Main(string[] args)
         {

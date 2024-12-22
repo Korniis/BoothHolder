@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Serilog;
-using SqlSugar;
 using StackExchange.Redis;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -192,7 +191,7 @@ namespace BoothHolder.Controllers
         public async Task<ApiResult> SetAvatar([FromBody] string avatarurl)
         {
 
-            if(string.IsNullOrEmpty(avatarurl))
+            if (string.IsNullOrEmpty(avatarurl))
                 return ApiResult.Error("不能为空");
 
             var userId = Convert.ToInt32(this.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
@@ -212,9 +211,25 @@ namespace BoothHolder.Controllers
             var userId = Convert.ToInt32(this.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             string cacheKey = $"user:{userId}";
 
-            if ( await _userService.UpdateUserAsync(userDTO,userId))
+            if (await _userService.UpdateUserAsync(userDTO, userId))
             {
                 await _redisDatabase.KeyDeleteAsync(_userDataRedis + cacheKey);
+                return ApiResult.Success("成功，大约3分钟后更新");
+            }
+            else
+                return ApiResult.Error("请重试");
+
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<ApiResult> AddEvent(long EvevtId)
+        {
+
+            var userId = Convert.ToInt32(this.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            if (await _userService.AddEvevt(userId, EvevtId))
+            {
+
+
                 return ApiResult.Success("成功，大约3分钟后更新");
             }
             else

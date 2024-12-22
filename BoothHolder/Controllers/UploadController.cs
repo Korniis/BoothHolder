@@ -22,6 +22,7 @@ public class UploadController : ControllerBase
     }
     // 上传文件接口
     [HttpPost]
+    [Authorize]
 
     public async Task<IActionResult> UploadUserImg(IFormFile file)
     {  // 检查文件的扩展名是否是图片格式
@@ -54,6 +55,8 @@ public class UploadController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
+
     public async Task<IActionResult> UploadBoothImg(IFormFile file)
     {
         string fileExtension = Path.GetExtension(file.FileName).ToLower();

@@ -54,7 +54,7 @@ namespace BoothHolder.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<ApiResult> CreateBooth([FromBody] BoothDTO booth)
         {
             if (booth == null)
@@ -79,9 +79,9 @@ namespace BoothHolder.Controllers
                 return ApiResult.Error("");
             }
 
-        if( await _boothService.UpdateBoothAsync(booth))
-             return ApiResult.Success("成功创建");
-        else
+            if (await _boothService.UpdateBoothAsync(booth))
+                return ApiResult.Success("成功修改");
+            else
                 return ApiResult.Error("更新错误");
         }
 
@@ -96,88 +96,101 @@ namespace BoothHolder.Controllers
             else
                 return ApiResult.Error("更新错误");
         }
+        [HttpGet]
+        public async Task<ApiResult> CalculateRoi()
+        {
+            var Revenue = await _boothService.GetRevenue();
+
+            var AllRevenue = await _boothService.GetFullRevenue();
+
+
+            return ApiResult.Success(new { Revenue, Coi = Revenue / AllRevenue });
+        }
     }
 
-        //[HttpGet]
-        //[Authorize]
-        //public async Task SeedDataAsync()
-        //{
-        //    // 插入品牌数据
-        //    _db.Insertable(new[]
-        //    {
-        //    new BrandType
-        //    {
-        //         BrandTypeId = 1,
-        //        BrandTypeName = "Applewood Furniture",
-        //        BrandDescription = "高端家具品牌，注重细节与品质。"
-        //    },
-        //    new BrandType
-        //    {
-        //         BrandTypeId = 2,
-        //        BrandTypeName = "Maplecraft",
-        //        BrandDescription = "经典的木制家具品牌，以其耐用性而著称。"
-        //    },
-        //    new BrandType
-        //    {
-        //         BrandTypeId = 3,
-        //        BrandTypeName = "Walnutwood Creations",
-        //        BrandDescription = "专业定制现代风格的家具，提供创新设计和舒适体验。"
-        //    },
-        //    new BrandType
-        //    {
-        //        BrandTypeId= 4,
-        //        BrandTypeName = "Birchcraft Designs",
-        //        BrandDescription = "以简洁、实用为设计理念，专注于家庭家具。"
-        //    }
-        //}).ExecuteCommand();
-        //    // 插入家具摊位数据
-        //    _db.Insertable(new[]
-        //{
-        //    new Booth
-        //    {
-        //        BoothId = 1,
-        //        BoothName = "摊位 Applewood 1",
-        //        Location = "123 Main St",
-        //        DailyRate = 150.75m,
-        //        IsAvailable = true,
-        //        BrandTypeId = 1,
-        //        AvailableDate = DateTime.Parse("2024-12-01"),
-        //        Description = "适合展示高档家具的摊位。"
-        //    },
-        //    new Booth
-        //    {
-        //        BoothId = 2,
-        //        BoothName = "摊位 Maplecraft 2",
-        //        Location = "456 Oak St",
-        //        DailyRate = 120.00m,
-        //        IsAvailable = false,
-        //        BrandTypeId = 2,
-        //        AvailableDate = DateTime.Parse("2024-12-05"),
-        //        Description = "经典木制家具展示区域。"
-        //    },
-        //    new Booth
-        //    {
-        //        BoothId = 3,
-        //        BoothName = "摊位 Walnutwood 3",
-        //        Location = "789 Pine St",
-        //        DailyRate = 180.50m,
-        //        IsAvailable = true,
-        //        BrandTypeId = 4,
-        //        AvailableDate = DateTime.Parse("2024-12-10"),
-        //        Description = "宽敞的摊位，适合大型家具。"
-        //    },
-        //    new Booth
-        //    {
-        //        BoothId = 4,
-        //        BoothName = "摊位 Birchcraft 4",
-        //        Location = "321 Elm St",
-        //        DailyRate = 200.00m,
-        //        IsAvailable = true,
-        //        BrandTypeId = 2,
-        //        AvailableDate = DateTime.Parse("2024-12-15"),
-        //        Description = "优越位置，吸引高流量。"
-        //    }
-        //}).ExecuteCommand();
-        //}
-    
+
+
+
+    //[HttpGet]
+    //[Authorize]
+    //public async Task SeedDataAsync()
+    //{
+    //    // 插入品牌数据
+    //    _db.Insertable(new[]
+    //    {
+    //    new BrandType
+    //    {
+    //         BrandTypeId = 1,
+    //        BrandTypeName = "Applewood Furniture",
+    //        BrandDescription = "高端家具品牌，注重细节与品质。"
+    //    },
+    //    new BrandType
+    //    {
+    //         BrandTypeId = 2,
+    //        BrandTypeName = "Maplecraft",
+    //        BrandDescription = "经典的木制家具品牌，以其耐用性而著称。"
+    //    },
+    //    new BrandType
+    //    {
+    //         BrandTypeId = 3,
+    //        BrandTypeName = "Walnutwood Creations",
+    //        BrandDescription = "专业定制现代风格的家具，提供创新设计和舒适体验。"
+    //    },
+    //    new BrandType
+    //    {
+    //        BrandTypeId= 4,
+    //        BrandTypeName = "Birchcraft Designs",
+    //        BrandDescription = "以简洁、实用为设计理念，专注于家庭家具。"
+    //    }
+    //}).ExecuteCommand();
+    //    // 插入家具摊位数据
+    //    _db.Insertable(new[]
+    //{
+    //    new Booth
+    //    {
+    //        BoothId = 1,
+    //        BoothName = "摊位 Applewood 1",
+    //        Location = "123 Main St",
+    //        DailyRate = 150.75m,
+    //        IsAvailable = true,
+    //        BrandTypeId = 1,
+    //        AvailableDate = DateTime.Parse("2024-12-01"),
+    //        Description = "适合展示高档家具的摊位。"
+    //    },
+    //    new Booth
+    //    {
+    //        BoothId = 2,
+    //        BoothName = "摊位 Maplecraft 2",
+    //        Location = "456 Oak St",
+    //        DailyRate = 120.00m,
+    //        IsAvailable = false,
+    //        BrandTypeId = 2,
+    //        AvailableDate = DateTime.Parse("2024-12-05"),
+    //        Description = "经典木制家具展示区域。"
+    //    },
+    //    new Booth
+    //    {
+    //        BoothId = 3,
+    //        BoothName = "摊位 Walnutwood 3",
+    //        Location = "789 Pine St",
+    //        DailyRate = 180.50m,
+    //        IsAvailable = true,
+    //        BrandTypeId = 4,
+    //        AvailableDate = DateTime.Parse("2024-12-10"),
+    //        Description = "宽敞的摊位，适合大型家具。"
+    //    },
+    //    new Booth
+    //    {
+    //        BoothId = 4,
+    //        BoothName = "摊位 Birchcraft 4",
+    //        Location = "321 Elm St",
+    //        DailyRate = 200.00m,
+    //        IsAvailable = true,
+    //        BrandTypeId = 2,
+    //        AvailableDate = DateTime.Parse("2024-12-15"),
+    //        Description = "优越位置，吸引高流量。"
+    //    }
+    //}).ExecuteCommand();
+    //}
+
 }

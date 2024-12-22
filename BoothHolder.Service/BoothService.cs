@@ -82,8 +82,10 @@ namespace BoothHolder.Service
                 upbooth.BrandTypeId = (long)booth.BrandTypeId;
                 upbooth.DailyRate = booth.DailyRate;
                 upbooth.AvailableDate = booth.AvailableDate;
-                if(!string.IsNullOrEmpty(booth.MediaUrl))
-                 upbooth.MediaUrl = booth.MediaUrl;
+                upbooth.Description = booth.Description;
+                upbooth.IsAvailable = (bool)booth.IsAvailable;
+                if (!string.IsNullOrEmpty(booth.MediaUrl))
+                    upbooth.MediaUrl = booth.MediaUrl;
 
                 // Save the updated booth to the repository
                 var result = await _boothRepository.UpdateAsync(upbooth);
@@ -104,6 +106,17 @@ namespace BoothHolder.Service
 
             booth.IsDeleted = true;
             return await _boothRepository.UpdateAsync(booth);
+        }
+
+        public async Task<decimal> GetRevenue()
+        {
+            return await _boothRepository.GetRevenue();
+        }
+
+        public async Task<decimal> GetFullRevenue()
+        {
+            return await _boothRepository.GetFullRevenue();
+
         }
     }
 }

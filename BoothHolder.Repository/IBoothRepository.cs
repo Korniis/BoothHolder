@@ -7,6 +7,8 @@ namespace BoothHolder.Repository
     {
         Task<bool> DeleteBoothAsyncById(long id);
         Task<long> GetCount(Expression<Func<Booth, bool>> predicate);
+        Task<decimal> GetRevenue();
+        Task<decimal> GetFullRevenue();
         Task<List<Booth>> SelectAllWithBrandTypeAsync(Expression<Func<Booth, bool>> predicate, int pageIndex, int pageSize);
         Task<Booth> SelectFullByIdAsync(long id);
     }

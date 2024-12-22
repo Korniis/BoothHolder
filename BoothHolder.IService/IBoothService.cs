@@ -7,6 +7,8 @@ namespace BoothHolder.IService
     {
         Task<long> Count(BoothQueryParams queryParams);
         Task<bool> DeleteBoothAsync(long id);
+        Task<decimal> GetRevenue();
+        Task<decimal> GetFullRevenue();
         Task<List<Booth>> SelectByQuery(BoothQueryParams queryParams);
         Task<Booth> SelectFullByIdAsync(long id);
         Task<bool> UpdateBoothAsync(BoothDTO booth);

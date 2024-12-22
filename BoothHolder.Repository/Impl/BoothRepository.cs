@@ -22,6 +22,16 @@ namespace BoothHolder.Repository.Impl
             return await _db.Queryable<Booth>().Where(it => !it.IsDeleted).CountAsync(predicate);
         }
 
+        public async Task<decimal> GetRevenue()
+        {
+            return await _db.Queryable<Booth>().Where(it => !it.IsDeleted && it.IsAvailable).SumAsync(it => it.DailyRate);
+        }
+
+        public async Task<decimal> GetFullRevenue()
+        {
+            return await _db.Queryable<Booth>().Where(it => !it.IsDeleted).SumAsync(it => it.DailyRate);
+        }
+
         public async Task<List<Booth>> SelectAllWithBrandTypeAsync(Expression<Func<Booth, bool>> predicate, int pageIndex, int pageSize)
         {
             var total = await _db.Queryable<Booth>().CountAsync(predicate);
