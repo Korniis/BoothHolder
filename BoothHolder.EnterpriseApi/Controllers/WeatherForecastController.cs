@@ -1,8 +1,6 @@
-using BoothHolder.UserApi;
 using Microsoft.AspNetCore.Mvc;
-using SqlSugar;
 
-namespace BoothHolder.UserApi.Controllers
+namespace BoothHolder.EnterpriseApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -15,17 +13,14 @@ namespace BoothHolder.UserApi.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        private readonly ISqlSugarClient _sqlSugarClient;
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, ISqlSugarClient db)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
-            _sqlSugarClient = db;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
-            _sqlSugarClient.ToString();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),

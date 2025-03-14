@@ -1,10 +1,10 @@
 using BoothHolder.Common.Configration;
+using BoothHolder.Common.Filter;
 using BoothHolder.Extensions.Buliderextensions;
 using BoothHolder.Extensions.ServiceExtensions;
-using BoothHolder.Filter;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
-namespace BoothHolder
+namespace BoothHolder.UserApi
 {//利用某高级程序设计语言（如.NET或JAVA等）或网络开发工具（如ASP、JSP等），结合SQL Server或 MySQL等数据库知识及操作，设计一家居商场摊位招商宣介平台，具体功能模块主要包括：
  //1、信息输入、输出：能够以友好的界面形式实现摊位信息、商户信息的输入、存储、格式输出。
  //2、查询模块：主要实现多种方式的信息查询，比如按摊位名称/位置、按品牌类型、按招租日期等查询。

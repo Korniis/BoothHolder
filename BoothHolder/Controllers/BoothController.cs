@@ -7,7 +7,7 @@ using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BoothHolder.Controllers
+namespace BoothHolder.UserApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]

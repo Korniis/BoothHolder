@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 using System.Security.Claims;
 
-namespace BoothHolder.Controllers
+namespace BoothHolder.UserApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -35,7 +35,7 @@ namespace BoothHolder.Controllers
 
         public async Task<ApiResult> GetMyEvent()
         {
-            var userId = Convert.ToInt32(this.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
             var user = await _sqlSugarClient.Queryable<User>().Includes(x => x.EventList).SingleAsync(x => x.Id == userId);
 

@@ -3,7 +3,7 @@ using BoothHolder.IService;
 using BoothHolder.Model.Entity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BoothHolder.Controllers
+namespace BoothHolder.UserApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]

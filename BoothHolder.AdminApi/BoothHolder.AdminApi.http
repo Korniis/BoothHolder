@@ -1,0 +1,6 @@
+@BoothHolder.AdminApi_HostAddress = http://localhost:5078
+
+GET {{BoothHolder.AdminApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -5,7 +5,7 @@ using Serilog;
 using StackExchange.Redis;
 using System.Security.Claims;
 
-namespace BoothHolder.Filter
+namespace BoothHolder.Common.Filter
 {
     public class TokenAuthorizationFilter : IAsyncActionFilter
     {

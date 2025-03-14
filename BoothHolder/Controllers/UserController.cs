@@ -10,7 +10,7 @@ using Serilog;
 using StackExchange.Redis;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
-namespace BoothHolder.Controllers
+namespace BoothHolder.UserApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
@@ -39,7 +39,7 @@ namespace BoothHolder.Controllers
         {
             Log.Debug("getRoles.......");
             var roles = await _userService.GetRoles();
-            var user = this.User;
+            var user = User;
             return ApiResult.Success(roles);
         }
         /*      [HttpGet("/token")]
@@ -82,7 +82,7 @@ namespace BoothHolder.Controllers
         [Authorize]
         public async Task<ApiResult> Userinfo()
         {
-            var userId = Convert.ToInt32(this.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             string cacheKey = $"user:{userId}";
             var cachedUserInfo = await _redisDatabase.StringGetAsync(_userDataRedis + cacheKey);
             User user;
@@ -111,7 +111,7 @@ namespace BoothHolder.Controllers
         [Authorize]
         public async Task<ApiResult> UserMoreinfo()
         {
-            var userId = Convert.ToInt32(this.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             string cacheKey = $"user:{userId}";
             User user = null;
             var cachedUserInfo = await _redisDatabase.StringGetAsync(_userDataRedis + cacheKey);
@@ -194,7 +194,7 @@ namespace BoothHolder.Controllers
             if (string.IsNullOrEmpty(avatarurl))
                 return ApiResult.Error("不能为空");
 
-            var userId = Convert.ToInt32(this.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
             if (await _userService.SetAvatar(userId, avatarurl))
                 return ApiResult.Success("成功");
@@ -208,7 +208,7 @@ namespace BoothHolder.Controllers
         public async Task<ApiResult> UpdateUser(UserDTO userDTO)
         {
 
-            var userId = Convert.ToInt32(this.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             string cacheKey = $"user:{userId}";
 
             if (await _userService.UpdateUserAsync(userDTO, userId))
@@ -225,7 +225,7 @@ namespace BoothHolder.Controllers
         public async Task<ApiResult> AddEvent(long EvevtId)
         {
 
-            var userId = Convert.ToInt32(this.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             if (await _userService.AddEvevt(userId, EvevtId))
             {
 

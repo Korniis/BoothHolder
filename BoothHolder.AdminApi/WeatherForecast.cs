@@ -1,4 +1,4 @@
-namespace BoothHolder.UserApi
+namespace BoothHolder.AdminApi
 {
     public class WeatherForecast
     {
