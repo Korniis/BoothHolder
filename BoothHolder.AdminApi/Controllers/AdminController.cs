@@ -13,6 +13,8 @@ namespace BoothHolder.AdminApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
+
     public class AdminController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -28,6 +30,7 @@ namespace BoothHolder.AdminApi.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ApiResult> Login(UserLoginDTO loginDTO)
         {
 
@@ -44,7 +47,6 @@ namespace BoothHolder.AdminApi.Controllers
 
         }
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<ApiResult> UserInfo()
         {
             var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
@@ -54,6 +56,8 @@ namespace BoothHolder.AdminApi.Controllers
             if (user==null) return ApiResult.Error("无该用户");
             return ApiResult.Success(new { username = user.UserName, useravatar = user.AvatarUrl });
         }
+      
+        
 
     }
 }

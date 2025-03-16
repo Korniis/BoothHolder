@@ -1,4 +1,6 @@
-﻿using SqlSugar;
+﻿using BoothHolder.Model.Status;
+using BoothHolder.Model.VO;
+using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +25,7 @@ namespace BoothHolder.Model.Entity
         public string ContactPhone { get; set; }  // 联系电话
 
         [SugarColumn(Length = 20, IsNullable = false)]
-        public string Status { get; set; } = "待审核";  // 申请状态（待审核/审核通过/审核拒绝）
+        public string Status { get; set; } = EnterpriseStatus.Waiting;  // 申请状态（待审核/审核通过/审核拒绝）
 
         [SugarColumn(IsNullable = true, ColumnDataType = "TEXT")]
         public string? Remark { get; set; }  // 审核备注
@@ -36,5 +38,22 @@ namespace BoothHolder.Model.Entity
 
         [SugarColumn(IsNullable = true)]
         public long? ReviewedBy { get; set; }  // 审核人 ID（管理员）
+
+       /// <summary>
+        /// 审核人附加评论（例如：审核过程中的附加意见）
+        /// </summary>
+        public string? AuditComment { get; set; }
+        /// <summary>
+        /// 申请信息
+        /// </summary
+        
+        [SugarColumn]
+       
+        public string? RemarkSupport { get; set; }
+        [Navigate(NavigateType.OneToOne,nameof(UserId))]  // OneToOne 表示一对一关系
+        public User ApplyUser { get; set; }  // 申请人用户信息
+        [Navigate(NavigateType.OneToOne, nameof(ReviewedBy))]  // OneToOne 表示一对一关系
+        public User ReviewedUser { get; set; }  // 申请人用户信息
+
     }
 }

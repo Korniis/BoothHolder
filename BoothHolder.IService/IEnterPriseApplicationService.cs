@@ -11,5 +11,7 @@ namespace BoothHolder.IService
     public interface IEnterpriseApplicationService : IBaseService<EnterpriseApplication, EnterpriseApplyDTO>
     {
         Task<int> ApplyEnterprise(long userId, EnterpriseApplyDTO enterpriseApplyDTO);
+        Task<int> EnterpriseAgain(int userId, EnterpriseApplyDTO enterpriseApplyDTO);
+        Task<List<EnterpriseApplication>> SelectByQuery(EnterpriseApplicationParams queryParams);
     }
 }

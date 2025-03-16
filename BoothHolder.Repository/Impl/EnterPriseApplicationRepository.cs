@@ -4,6 +4,7 @@ using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,6 +22,17 @@ namespace BoothHolder.Repository.Impl
         {
         return await _db.Insertable(application).ExecuteCommandAsync();
             
+        }
+
+     
+
+        public async Task<int> UpdateEnterpriseAsync(EnterpriseApplication enterpriseApplication)
+        {
+            return await  _db.Updateable(enterpriseApplication).ExecuteCommandAsync();
+        }
+        public async Task<List<EnterpriseApplication>> SelectByQueryAsync(Expression<Func<EnterpriseApplication, bool>> predicate)
+        {
+            return  await _db.Queryable<EnterpriseApplication>().Includes(it=>it.ReviewedUser).Includes(ea=>ea.ApplyUser).Where(predicate).ToListAsync();
         }
     }
 }

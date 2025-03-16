@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using StackExchange.Redis;
+using System.Linq;
 
 namespace BoothHolder.AdminApi.Controllers
 {
@@ -42,14 +43,16 @@ namespace BoothHolder.AdminApi.Controllers
 
 
             List<User> users = await _userService.SelectByQuery(queryParams);
-            var total = await _userService.Count(queryParams);
+            //var total = await _userService.Count(queryParams);
+            var total = users.Count();
 
             var page = _mapper.Map<List<UserVO>>(users);
             if (page == null)
                 return ApiResult.Error("没有找到");
             return ApiResult.Success(new { total, queryParams.PageIndex, queryParams.PageSize, page });
         }
-        
+      
+
 
     }
 }

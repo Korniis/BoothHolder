@@ -133,7 +133,7 @@ namespace BoothHolder.UserApi.Controllers
             {
                 // 将用户数据序列化并存储到 Redis 中，设置过期时间（例如 1小时）
                 await _redisDatabase.StringSetAsync(_userDataRedis + cacheKey, JsonConvert.SerializeObject(user), TimeSpan.FromHours(1));
-                _mapper.Map<UserDTO>(user);
+                
                 return ApiResult.Success(_mapper.Map<UserDTO>(user));
             }
             else
@@ -241,14 +241,32 @@ namespace BoothHolder.UserApi.Controllers
         }
         [HttpPost]
         [Authorize]
-        public async Task<ApiResult> ApplyEnterPrise(EnterpriseApplyDTO enterpriseApplyDTO)
+        public async Task<ApiResult> ApplyEnterprise(EnterpriseApplyDTO enterpriseApplyDTO)
         {
             var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
-            if (await _enterpriseApplicationService.ApplyEnterprise(userId, enterpriseApplyDTO) != 0)
-                return ApiResult.Success("申请成功");
+            int val = await _enterpriseApplicationService.ApplyEnterprise(userId, enterpriseApplyDTO) ;
+            if (val > 0)
+                return ApiResult.Success("申请成功，请稍后");
+             else if (val == -1)
+                return ApiResult.Error("不要重复申请");
+            else
+                return ApiResult.Error("申请失败");
 
-            return ApiResult.Success("申请成功");
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<ApiResult> EnterpriseAgain(EnterpriseApplyDTO enterpriseApplyDTO)
+        {
+            var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+            int val = await _enterpriseApplicationService.EnterpriseAgain(userId, enterpriseApplyDTO);
+            if (val > 0)
+                return ApiResult.Success("申请成功，请稍后");
+            else if (val == -1)
+                return ApiResult.Error("未申请或申请已通过");
+            else
+                return ApiResult.Error("申请失败");
 
         }
     }

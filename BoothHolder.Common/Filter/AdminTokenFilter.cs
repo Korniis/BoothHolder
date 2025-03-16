@@ -24,9 +24,11 @@ namespace BoothHolder.Common.Filter
             var authorizeAttribute = context.ActionDescriptor.EndpointMetadata
                 .OfType<AuthorizeAttribute>()
                 .FirstOrDefault();
-
+            var allowAnonymousAttribute = context.ActionDescriptor.EndpointMetadata
+               .OfType<AllowAnonymousAttribute>()
+               .FirstOrDefault();
             // 如果没有 [Authorize] 特性，则跳过 token 验证
-            if (authorizeAttribute == null)
+            if (authorizeAttribute == null|| allowAnonymousAttribute!=null)
             {
                 await next();
                 return;

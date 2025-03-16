@@ -16,5 +16,16 @@ namespace BoothHolder.Model.DTO
         /// 企业联系电话（必填）
         /// </summary>
         public string ContactPhone { get; set; }
+        public string RemarkSupport { get; set; }
     }
+    public class EnterpriseApplicationParams
+    {
+        public string? EnterpriseName { get; set; }
+        public List<string>? Status { get; set; }
+
+        public int PageIndex { get; set; } = 0;  // 默认第一页
+        public int PageSize { get; set; } = 30;  // 默认每页10条
+    }
+
+
 }

@@ -20,13 +20,14 @@ namespace BoothHolder.Common.Filter
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            // 检查操作方法或控制器上是否有 [Authorize] 特性
             var authorizeAttribute = context.ActionDescriptor.EndpointMetadata
                 .OfType<AuthorizeAttribute>()
                 .FirstOrDefault();
-
+            var allowAnonymousAttribute = context.ActionDescriptor.EndpointMetadata
+               .OfType<AllowAnonymousAttribute>()
+               .FirstOrDefault();
             // 如果没有 [Authorize] 特性，则跳过 token 验证
-            if (authorizeAttribute == null)
+            if (authorizeAttribute == null || allowAnonymousAttribute != null)
             {
                 await next();
                 return;
