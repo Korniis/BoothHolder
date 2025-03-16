@@ -24,7 +24,7 @@ namespace BoothHolder.Extensions.ServiceExtensions
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "前面加Bearer",
-                    Name = "家具商场招商平台",
+                    Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
 

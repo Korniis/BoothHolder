@@ -2,6 +2,7 @@
 using BoothHolder.IService;
 using BoothHolder.Model.DTO;
 using BoothHolder.Model.Entity;
+using BoothHolder.Service;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +20,14 @@ namespace BoothHolder.UserApi.Controllers
         private readonly IUserService _userService;
         private readonly IDatabase _redisDatabase;
         private readonly IMapper _mapper;
+        private readonly IEnterpriseApplicationService _enterpriseApplicationService;
         private readonly string _userDataRedis = "UserDataPrefix";
-        public UserController(IUserService userService, IConnectionMultiplexer connection, IMapper mapper)
+        public UserController(IUserService userService, IConnectionMultiplexer connection, IMapper mapper, IEnterpriseApplicationService enterpriseApplicationService)
         {
             _userService = userService;
             _redisDatabase = connection.GetDatabase();
             _mapper = mapper;
+            _enterpriseApplicationService = enterpriseApplicationService;
         }
         [HttpGet]
         public async Task<List<UserDTO>> GetUsers()
@@ -234,6 +237,18 @@ namespace BoothHolder.UserApi.Controllers
             }
             else
                 return ApiResult.Error("请重试");
+
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<ApiResult> ApplyEnterPrise(EnterpriseApplyDTO enterpriseApplyDTO)
+        {
+            var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+            if (await _enterpriseApplicationService.ApplyEnterprise(userId, enterpriseApplyDTO) != 0)
+                return ApiResult.Success("申请成功");
+
+            return ApiResult.Success("申请成功");
 
         }
     }

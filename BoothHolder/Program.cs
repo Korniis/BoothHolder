@@ -57,7 +57,7 @@ namespace BoothHolder.UserApi
             builder.Services.Configure<MvcOptions>(opt =>
             {
 
-                opt.Filters.Add<TokenAuthorizationFilter>();
+                opt.Filters.Add<UserTokenFilter>();
             });
             var urls = builder.Configuration.GetSection("CorsUrls").Get<string[]>();
             builder.Services.AddCors(options =>

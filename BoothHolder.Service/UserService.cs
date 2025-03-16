@@ -5,15 +5,19 @@ using BoothHolder.IService;
 using BoothHolder.Model.DTO;
 using BoothHolder.Model.Entity;
 using BoothHolder.Repository;
+using BoothHolder.Repository.Impl;
 using MapsterMapper;
+using Microsoft.IdentityModel.Tokens;
+using SqlSugar;
 using StackExchange.Redis;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using Role = BoothHolder.Model.Entity.Role;
 namespace BoothHolder.Service
 {
     public class UserService : BaseService<User, UserDTO>, IUserService
     {
-        private readonly IUserRepository _userResposity;
+        private readonly IUserRepository _userRespository;
         private readonly IMapper _mapper;
         private readonly IBaseRepository<User> _baseRepository;
         private readonly IBaseRepository<Role> _roleRepository;
@@ -21,7 +25,7 @@ namespace BoothHolder.Service
         private readonly IBaseRepository<EventUser> _eventUserRepository;
         private readonly IDatabase _redisDatabase;
         private readonly string _redisPrefix = "EmailVerification:";
-        private readonly string _redisToken = "TokenVerification:";
+        private readonly string _userredistoken = "usertoken:";
 
         public UserService(IUserRepository userResposity,
             IBaseRepository<User> repository,
@@ -31,7 +35,7 @@ namespace BoothHolder.Service
             IConnectionMultiplexer connectionMultiplexer,
             IBaseRepository<EventUser> eventUserRepository) : base(repository, mapper) // 调用 BaseService 的构造函数
         {
-            _userResposity = userResposity;
+            _userRespository = userResposity;
             _roleRepository = roleRepository;
             _mapper = mapper;
             _baseRepository = repository;
@@ -41,12 +45,12 @@ namespace BoothHolder.Service
         }
         public async Task<List<RoleDTO>> GetRoles()
         {
-            List<Role> roles = await _userResposity.GetRoles();
+            List<Role> roles = await _userRespository.GetRoles();
             return _mapper.Map<List<RoleDTO>>(roles);
         }
         public async Task<List<UserDTO>> GetUsers()
         {
-            List<User> users = await _userResposity.GetUsers();
+            List<User> users = await _userRespository.GetUsers();
             return _mapper.Map<List<UserDTO>>(users);
         }
         //创建用户
@@ -54,7 +58,7 @@ namespace BoothHolder.Service
         {
             User newUser = _mapper.Map<User>(user);
             newUser.PasswordHash = MD5Helper.GetMD5(user.Password);
-            var id = await _userResposity.CreateUser(newUser);
+            var id = await _userRespository.CreateUser(newUser);
             Role role = await _roleRepository.SelectOneAsync(t => t.RoleName == "User");
             newUser.RoleList = [role];
             // 5. 插入多对多关系：将用户与角色关联
@@ -69,7 +73,7 @@ namespace BoothHolder.Service
         //获取用户token
         public async Task<string> GetToken(UserLoginDTO loginDTO)
         {
-            var user = await _userResposity.SelectOneWithRoleAsync(x => x.UserName == loginDTO.Username);
+            var user = await _userRespository.SelectOneWithRoleAsync(x => x.UserName == loginDTO.Username);
             var password = MD5Helper.GetMD5(loginDTO.Password);
             // 如果用户不存在，抛出异常
             if (user == null || password != user.PasswordHash) return null;
@@ -87,7 +91,7 @@ namespace BoothHolder.Service
             }
             var token = JwtHelper.CreateToken(claims);
             var expiresIn = Convert.ToInt32(AppSettings.app("JwtSettings:ClockSkewMinutes"));
-            await _redisDatabase.StringSetAsync(_redisToken + user.UserName, token, TimeSpan.FromMinutes(expiresIn));
+            await _redisDatabase.StringSetAsync(_userredistoken + user.UserName, token, TimeSpan.FromMinutes(expiresIn));
 
             return token;
         }
@@ -103,7 +107,7 @@ namespace BoothHolder.Service
             try
             {
                 newUser.PasswordHash = MD5Helper.GetMD5(userRegisterDTO.Password);
-                var id = await _userResposity.CreateUser(newUser);
+                var id = await _userRespository.CreateUser(newUser);
                 Role role = await _roleRepository.SelectOneAsync(t => t.RoleName == "User");
                 newUser.RoleList = [role];
                 // 5. 插入多对多关系：将用户与角色关联
@@ -124,7 +128,7 @@ namespace BoothHolder.Service
         public async Task<bool> SendConfirmCode(string email, bool isRemake)
         {
             // 使用 lambda 表达式检查用户是否已存在
-            if (!isRemake && await _userResposity.SelectOneAsync(x => x.Email == email) != null)
+            if (!isRemake && await _userRespository.SelectOneAsync(x => x.Email == email) != null)
                 return false;
 
 
@@ -180,5 +184,61 @@ namespace BoothHolder.Service
             return await _eventUserRepository.CreateAsync(eventUser) != 0 ? true : false;
 
         }
+
+        public async Task<List<User>> SelectByQuery(UserQueryParams queryParams)
+        {
+            var predicate = GetPredicate(queryParams);
+            return await   _userRespository.SelectAllWithQueryAsync(predicate, queryParams.PageIndex, queryParams.PageSize);
+
+        }
+
+        public async Task<long> Count(UserQueryParams queryParams)
+        {
+            var predicate = GetPredicate(queryParams);
+
+            return await _userRespository.GetCountAsync(predicate);
+        }
+        public Expression<Func<User, bool>> GetPredicate(UserQueryParams queryParams)
+        {
+            var predicate = Expressionable.Create<User>()
+                .AndIF(!string.IsNullOrEmpty(queryParams.UserName), it => it.UserName.Contains(queryParams.UserName))
+                .AndIF(!queryParams.RoleNames.IsNullOrEmpty(), it => it.RoleList.All(r => queryParams.RoleNames.Contains(r.RoleName)))
+                .ToExpression(); // 生成最终的表达式
+            return predicate;
+
+        }
+
+   
+
+        //public async  Task<RegisterStatus> CreateAdminAsync(UserRegisterDTO userRegisterDTO)
+        //{
+        //    User newUser = _mapper.Map<User>(userRegisterDTO);
+        //    string storedCode = await _redisDatabase.StringGetAsync(_redisPrefix + userRegisterDTO.Email);
+        //    if (string.IsNullOrEmpty(storedCode) || !storedCode.Equals(userRegisterDTO.Code))
+        //    {
+        //        return RegisterStatus.EmailWrong;
+        //    }
+        //    try
+        //    {
+        //        newUser.PasswordHash = MD5Helper.GetMD5(userRegisterDTO.Password);
+        //        var id = await _userRespository.CreateUser(newUser);
+        //        Role role = await _roleRepository.SelectOneAsync(t => t.RoleName == "User");
+        //        newUser.RoleList = [role];
+        //        // 5. 插入多对多关系：将用户与角色关联
+        //        var userRoleRelations = newUser.RoleList.Select(role => new UserRole
+        //        {
+        //            UserID = id,  // 注意：这里假设用户的 Id 已经生成
+        //            RoleID = role.RoleID
+        //        }).ToList();
+        //        await _userroleRepository.CreateAsync(userRoleRelations);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return RegisterStatus.Error;
+        //    }
+        //    _redisDatabase.KeyDelete(_redisPrefix + userRegisterDTO.Email);
+        //    return RegisterStatus.Success;
+        //}
     }
+
 }

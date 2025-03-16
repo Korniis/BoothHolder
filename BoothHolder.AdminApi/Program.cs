@@ -1,4 +1,3 @@
-using BoothHolder.Common.Configration;
 using BoothHolder.Common.Filter;
 using BoothHolder.Extensions.Buliderextensions;
 using BoothHolder.Extensions.ServiceExtensions;
@@ -11,12 +10,15 @@ namespace BoothHolder.AdminApi
     {
         public static void Main(string[] args)
         {
-        
+
 
             var builder = WebApplication.CreateBuilder(args);
+
             // 配置 Serilog
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(builder.Configuration)
+                .MinimumLevel.Debug() // 设置最小日志级别为 Debug
+                .WriteTo.Console() // 输出日志到控制台
+
                 .CreateLogger();
             // 添加服务
             builder.Services.AddConfiguration(builder);
@@ -38,7 +40,7 @@ namespace BoothHolder.AdminApi
             // 配置全局过滤器
             builder.Services.Configure<MvcOptions>(opt =>
             {
-                opt.Filters.Add<TokenAuthorizationFilter>();
+                opt.Filters.Add<AdminTokenFilter>();
             });
 
             var app = builder.Build();

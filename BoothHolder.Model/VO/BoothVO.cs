@@ -13,6 +13,7 @@
         public string Description { get; set; } // 摊位描述
         public long BrandTypeId { get; set; } // 品牌类型
         public string BrandTypeName { get; set; } // 品牌类型名称（可以用 BrandType 的名称来简化信息）
+        public string UserName {  get; set; }
 
     }
 }

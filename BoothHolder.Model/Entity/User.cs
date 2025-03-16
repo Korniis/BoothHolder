@@ -32,6 +32,8 @@ namespace BoothHolder.Model.Entity
         public List<Reservation> Reservations { get; set; } // 关联的预定信息
         [Navigate(typeof(EventUser), nameof(EventUser.UserID), nameof(EventUser.EventID))]//注意顺序
         public List<Event> EventList { get; set; }//只能是null不能赋默认值
+        [Navigate(NavigateType.OneToMany, nameof(Booth.UserId))] // 一对多导航
+        public List<Booth> Booths { get; set; }
     }
 
 

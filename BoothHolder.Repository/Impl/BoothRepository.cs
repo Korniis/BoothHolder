@@ -37,7 +37,7 @@ namespace BoothHolder.Repository.Impl
             var total = await _db.Queryable<Booth>().CountAsync(predicate);
 
 
-            return await _db.Queryable<Booth>().Includes(x => x.BrandType).Where(it => !it.IsDeleted).Where(predicate)
+            return await _db.Queryable<Booth>().Includes(u=>u.User).Includes(x => x.BrandType).Where(it => !it.IsDeleted).Where(predicate)
                  .Skip(pageIndex * pageSize) // 跳过前面的记录
                   .Take(pageSize) // 获取当前页的记录
                   .ToListAsync();

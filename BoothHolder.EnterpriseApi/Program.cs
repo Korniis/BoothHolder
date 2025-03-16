@@ -1,10 +1,18 @@
 
+using Serilog;
+
 namespace BoothHolder.EnterpriseApi
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+            // 配置 Serilog
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug() // 设置最小日志级别为 Debug
+                .WriteTo.Console() // 输出日志到控制台
+
+                .CreateLogger();
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.

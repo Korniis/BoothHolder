@@ -14,5 +14,9 @@ namespace BoothHolder.IService
         Task<bool> SetAvatar(int userId, string avatarurl);
         Task<bool> UpdateUserAsync(UserDTO userDTO, long userId);
         Task<bool> AddEvevt(int userId, long evevtId);
+        Task<List<User>> SelectByQuery(UserQueryParams queryParams);
+        Task<long> Count(UserQueryParams queryParams);
+
+        // Task<RegisterStatus> CreateAdminAsync(UserRegisterDTO userRegisterDTO);
     }
 }

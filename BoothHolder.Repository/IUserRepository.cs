@@ -9,5 +9,7 @@ namespace BoothHolder.Repository
         Task<List<Role>> GetRoles();
         Task<int> CreateUser(User user);
         Task<User> SelectOneWithRoleAsync(Expression<Func<User, bool>> value);
+        Task<List<User>> SelectAllWithQueryAsync(Expression<Func<User, bool>> predicate, int pageIndex, int pageSize);
+        Task<long> GetCountAsync(Expression<Func<User, bool>> predicate);
     }
 }

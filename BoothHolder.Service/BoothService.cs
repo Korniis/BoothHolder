@@ -84,6 +84,10 @@ namespace BoothHolder.Service
                 upbooth.AvailableDate = booth.AvailableDate;
                 upbooth.Description = booth.Description;
                 upbooth.IsAvailable = (bool)booth.IsAvailable;
+                if(!upbooth.IsAvailable)
+                {
+                    upbooth.UserId = null;
+                }
                 if (!string.IsNullOrEmpty(booth.MediaUrl))
                     upbooth.MediaUrl = booth.MediaUrl;
 

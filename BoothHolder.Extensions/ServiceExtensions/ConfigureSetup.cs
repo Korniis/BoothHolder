@@ -35,7 +35,9 @@ namespace BoothHolder.Extensions.ServiceExtensions
                     : new List<string>());
 
             config.NewConfig<Booth, BoothVO>()
-                .Map(dest => dest.BrandTypeName, src => src.BrandType.BrandTypeName);
+                .Map(dest => dest.BrandTypeName, src => src.BrandType.BrandTypeName).Map(dest=>dest.UserName,src=>src.User.UserName);
+            config.NewConfig<User, UserVO>()
+              .Map(dest => dest.RoleNames, src => src.RoleList.Select(r=>r.RoleName));
 
             services.AddSingleton(config);
             services.AddScoped<IMapper, ServiceMapper>();

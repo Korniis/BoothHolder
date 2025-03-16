@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using BoothHolder.Model.Entity;
+using System.Linq.Expressions;
 
 namespace BoothHolder.Repository
 {
@@ -48,7 +49,5 @@ namespace BoothHolder.Repository
         /// <param name="expression"></param>
         /// <returns></returns>
         public Task<List<TEntity>> SelectAllAsync(Expression<Func<TEntity, bool>> expression);
-
-
     }
 }

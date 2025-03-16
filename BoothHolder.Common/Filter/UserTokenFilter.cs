@@ -7,12 +7,13 @@ using System.Security.Claims;
 
 namespace BoothHolder.Common.Filter
 {
-    public class TokenAuthorizationFilter : IAsyncActionFilter
+    public class UserTokenFilter : IAsyncActionFilter
     {
         private readonly IDatabase _database;
-        private readonly string _redisToken = "TokenVerification:";
+        private readonly string _userredistoken = "usertoken:";
 
-        public TokenAuthorizationFilter(IConnectionMultiplexer connection)
+
+        public UserTokenFilter(IConnectionMultiplexer connection)
         {
             _database = connection.GetDatabase();
         }
@@ -81,7 +82,7 @@ namespace BoothHolder.Common.Filter
             // 示例: 假设验证 token 是否为 "valid_token"（这里只是一个示例，实际验证逻辑应该根据你的需求进行）
 
             var userNameClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name);
-            var redistoken = await _database.StringGetAsync(_redisToken + userNameClaim.Value);
+            var redistoken = await _database.StringGetAsync(_userredistoken + userNameClaim.Value);
 
             if (actualToken.Equals(redistoken)) return true;
 

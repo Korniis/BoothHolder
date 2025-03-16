@@ -38,5 +38,12 @@ namespace BoothHolder.Model.Entity
         public List<Reservation> Reservations { get; set; } // 关联的预定信息
         [Navigate(NavigateType.ManyToOne, nameof(BrandTypeId), nameof(BrandType.Id))]
         public BrandType BrandType { get; set; } // 导航属性
+        [SugarColumn]
+
+        public long? UserId { get; set; } // 允许为空，表示摊位可以没有归属用户
+
+        [Navigate(NavigateType.OneToOne, nameof(UserId))] // 关联 User
+        public User User { get; set; }
+
     }
 }
