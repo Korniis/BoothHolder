@@ -35,6 +35,15 @@
                 Message = msg,
             };
         }
+        public static ApiResult NotFound(string msg)
+        {
+            return new ApiResult
+            {
+                Code = 404,
+                Data = null,
+                Message = msg,
+            };
+        }
         public static ApiResult AuthError(string msg)
         {
             return new ApiResult

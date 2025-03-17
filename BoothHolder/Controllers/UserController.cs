@@ -20,14 +20,13 @@ namespace BoothHolder.UserApi.Controllers
         private readonly IUserService _userService;
         private readonly IDatabase _redisDatabase;
         private readonly IMapper _mapper;
-        private readonly IEnterpriseApplicationService _enterpriseApplicationService;
+
         private readonly string _userDataRedis = "UserDataPrefix";
         public UserController(IUserService userService, IConnectionMultiplexer connection, IMapper mapper, IEnterpriseApplicationService enterpriseApplicationService)
         {
             _userService = userService;
             _redisDatabase = connection.GetDatabase();
             _mapper = mapper;
-            _enterpriseApplicationService = enterpriseApplicationService;
         }
         [HttpGet]
         public async Task<List<UserDTO>> GetUsers()
@@ -239,36 +238,7 @@ namespace BoothHolder.UserApi.Controllers
                 return ApiResult.Error("请重试");
 
         }
-        [HttpPost]
-        [Authorize]
-        public async Task<ApiResult> ApplyEnterprise(EnterpriseApplyDTO enterpriseApplyDTO)
-        {
-            var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
-
-            int val = await _enterpriseApplicationService.ApplyEnterprise(userId, enterpriseApplyDTO) ;
-            if (val > 0)
-                return ApiResult.Success("申请成功，请稍后");
-             else if (val == -1)
-                return ApiResult.Error("不要重复申请");
-            else
-                return ApiResult.Error("申请失败");
-
-        }
-        [HttpPost]
-        [Authorize]
-        public async Task<ApiResult> EnterpriseAgain(EnterpriseApplyDTO enterpriseApplyDTO)
-        {
-            var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
-
-            int val = await _enterpriseApplicationService.EnterpriseAgain(userId, enterpriseApplyDTO);
-            if (val > 0)
-                return ApiResult.Success("申请成功，请稍后");
-            else if (val == -1)
-                return ApiResult.Error("未申请或申请已通过");
-            else
-                return ApiResult.Error("申请失败");
-
-        }
+       
     }
 
 

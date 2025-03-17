@@ -10,6 +10,8 @@ using MapsterMapper;
 using Microsoft.IdentityModel.Tokens;
 using SqlSugar;
 using StackExchange.Redis;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using Role = BoothHolder.Model.Entity.Role;
@@ -187,16 +189,73 @@ namespace BoothHolder.Service
 
         public async Task<List<User>> SelectByQuery(UserQueryParams queryParams)
         {
-            var predicate = GetPredicate(queryParams);
-            return await   _userRespository.SelectAllWithQueryAsync(predicate, queryParams.PageIndex, queryParams.PageSize);
+            //var predicate = GetPredicate(queryParams);
+            var roleNames = queryParams.RoleNames;
+            var userName = queryParams.UserName;
 
+            // 构建基础查询条件
+            var predicate = Expressionable.Create<User>()
+                .AndIF(!string.IsNullOrEmpty(userName), it => it.UserName.Contains(userName))
+                .ToExpression();
+
+            // 查询用户
+            var users = await _userRespository.SelectAllWithQueryAsync(predicate, queryParams.PageIndex, queryParams.PageSize);
+
+            // 在内存中过滤用户
+            if (!roleNames.IsNullOrEmpty())
+            {
+                users = users.Where(u =>
+                  roleNames.All(roleName => u.RoleList.Any(r => r.RoleName == roleName)))
+                  .ToList();
+            }
+
+            return users;
+         
         }
 
         public async Task<long> Count(UserQueryParams queryParams)
         {
-            var predicate = GetPredicate(queryParams);
+            try
+            {
+                // 基础 SQL 查询
+                var sql = @"
+            SELECT COUNT(DISTINCT u.Id)
+            FROM t_user u
+            LEFT JOIN t_userrole ur ON u.Id = ur.UserId
+            LEFT JOIN t_role r ON ur.RoleId = r.RoleId
+            WHERE 1 = 1";
 
-            return await _userRespository.GetCountAsync(predicate);
+                // 动态添加查询条件
+                var parameters = new List<SugarParameter>();
+
+                if (!string.IsNullOrEmpty(queryParams.UserName))
+                {
+                    sql += " AND u.UserName LIKE @UserName";
+                    parameters.Add(new SugarParameter("@UserName", $"%{queryParams.UserName}%"));
+                }
+
+                if (!queryParams.RoleNames.IsNullOrEmpty())
+                {
+                    // 将 RoleNames 列表转换为逗号分隔的字符串
+                    var roleNamesString = string.Join(",", queryParams.RoleNames.Select(r => $"'{r}'"));
+                    sql += $" AND r.RoleName IN ({roleNamesString})";
+                }
+                //if (!queryParams.RoleNames.IsNullOrEmpty())
+                //{
+                //    sql += " AND r.RoleName IN @RoleNames";
+                //    parameters.Add(new SugarParameter("@RoleNames", queryParams.RoleNames));
+                //}
+
+                // 使用 SQLSugar 执行查询
+                var totalCount = await _userRespository. GetCountAsync(sql, parameters);
+
+                return totalCount;
+            }
+            catch (Exception ex)
+            {
+                // 记录日志并抛出异常
+                throw new ApplicationException("An error occurred while counting users.", ex);
+            }
         }
         public Expression<Func<User, bool>> GetPredicate(UserQueryParams queryParams)
         {

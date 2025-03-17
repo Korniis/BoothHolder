@@ -12,6 +12,7 @@ namespace BoothHolder.Repository
     public interface IEnterpriseApplicationRepository
     {
         Task<int> ApplyEnterpriseAsync(EnterpriseApplication application);
+        Task<long> CountAsync(Expression<Func<EnterpriseApplication, bool>> predicate);
         Task<List<EnterpriseApplication>> SelectByQueryAsync(Expression<Func<EnterpriseApplication, bool>> predicate);
         Task<int> UpdateEnterpriseAsync(EnterpriseApplication enterpriseApplication);
     }

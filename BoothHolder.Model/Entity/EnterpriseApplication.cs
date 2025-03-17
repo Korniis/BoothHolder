@@ -39,13 +39,7 @@ namespace BoothHolder.Model.Entity
         [SugarColumn(IsNullable = true)]
         public long? ReviewedBy { get; set; }  // 审核人 ID（管理员）
 
-       /// <summary>
-        /// 审核人附加评论（例如：审核过程中的附加意见）
-        /// </summary>
-        public string? AuditComment { get; set; }
-        /// <summary>
-        /// 申请信息
-        /// </summary
+     
         
         [SugarColumn]
        
@@ -56,4 +50,5 @@ namespace BoothHolder.Model.Entity
         public User ReviewedUser { get; set; }  // 申请人用户信息
 
     }
+
 }

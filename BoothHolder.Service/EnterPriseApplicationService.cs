@@ -89,5 +89,33 @@ namespace BoothHolder.Service
             return predicate;
 
         }
+
+        public async Task<int> RemarkApplication(int RemarkById, RemarkQuery remarkQuery)
+        {
+           var app=   await _repository.SelectOneByIdAsync(remarkQuery.Id);
+            app.Remark = remarkQuery.Remark;
+            app.ReviewedBy = RemarkById;
+            if (remarkQuery.Status==1)
+                app.Status=EnterpriseStatus.Passed;
+            else 
+                app.Status=EnterpriseStatus.Rejected;
+            app.ReviewedAt= DateTime.Now;
+            
+            return await _enterpriseApplicationRepository.UpdateEnterpriseAsync(app);
+           // _enterpriseApplicationRepository
+        }
+
+        public async Task<EnterpriseApplication> SelectOneByUserIdAsync(long userId)
+        {
+            return await _repository.SelectOneAsync(it => it.UserId == userId);
+        }
+
+        public async Task<long> CountTotal(EnterpriseApplicationParams queryParams)
+        {
+
+            var predicate = GetPredicate(queryParams);
+
+            return await _enterpriseApplicationRepository.CountAsync(predicate);
+        }
     }
 }

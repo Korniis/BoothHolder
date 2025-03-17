@@ -34,5 +34,10 @@ namespace BoothHolder.Repository.Impl
         {
             return  await _db.Queryable<EnterpriseApplication>().Includes(it=>it.ReviewedUser).Includes(ea=>ea.ApplyUser).Where(predicate).ToListAsync();
         }
+
+        public async Task<long> CountAsync(Expression<Func<EnterpriseApplication, bool>> predicate)
+        {
+            return await _db.Queryable<EnterpriseApplication>().Where(predicate).CountAsync();
+        }
     }
 }

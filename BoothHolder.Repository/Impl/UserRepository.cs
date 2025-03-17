@@ -42,16 +42,19 @@ namespace BoothHolder.Repository.Impl
 
         public async Task<List<User>> SelectAllWithQueryAsync(Expression<Func<User, bool>> predicate, int pageIndex, int pageSize)
         {
-         var total = await _db.Queryable<User>().CountAsync(predicate);
             return await _db.Queryable<User>().Includes(c=>c.RoleList).Where(predicate)
           .Skip(pageIndex * pageSize) // 跳过前面的记录
            .Take(pageSize) // 获取当前页的记录
            .ToListAsync();
         }
 
-        public async Task<long> GetCountAsync(Expression<Func<User, bool>> predicate)
-        {
-            return await _db.Queryable<User>().CountAsync(predicate);
+        //public async Task<long> GetCountAsync(Expression<Func<User, bool>> predicate)
+        //{
+        //    return await _db.Queryable<User>().CountAsync(predicate);
+        //}
+
+        public async Task<long> GetCountAsync(string sql, List<SugarParameter> parameters)
+        { return await    _db.Ado.GetIntAsync(sql, parameters);
         }
     }
 }

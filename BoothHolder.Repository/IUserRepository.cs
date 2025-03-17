@@ -1,4 +1,5 @@
 ﻿using BoothHolder.Model.Entity;
+using SqlSugar;
 using System.Linq.Expressions;
 
 namespace BoothHolder.Repository
@@ -10,6 +11,6 @@ namespace BoothHolder.Repository
         Task<int> CreateUser(User user);
         Task<User> SelectOneWithRoleAsync(Expression<Func<User, bool>> value);
         Task<List<User>> SelectAllWithQueryAsync(Expression<Func<User, bool>> predicate, int pageIndex, int pageSize);
-        Task<long> GetCountAsync(Expression<Func<User, bool>> predicate);
+        Task<long> GetCountAsync(string sql, List<SugarParameter> parameters);
     }
 }

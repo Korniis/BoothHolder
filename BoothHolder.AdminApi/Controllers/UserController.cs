@@ -11,15 +11,13 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using StackExchange.Redis;
 using System.Linq;
-
 namespace BoothHolder.AdminApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-   // [Authorize(Roles ="admin")]
+    //[Authorize(Roles ="admin")]
     public class UserController : ControllerBase
     {
-
         private readonly IUserService _userService;
         private readonly IDatabase _redisDatabase;
         private readonly IMapper _mapper;
@@ -36,23 +34,17 @@ namespace BoothHolder.AdminApi.Controllers
             var users = await _userService.GetUsers();
             return users;
         }
-
         [HttpGet]
         public async Task<ApiResult> GetList([FromQuery] UserQueryParams queryParams)
         {
-
-
+            if (queryParams.RoleNames?.Count == 1) queryParams.RoleNames = queryParams.RoleNames[0].Split(',').ToList();
             List<User> users = await _userService.SelectByQuery(queryParams);
-            //var total = await _userService.Count(queryParams);
-            var total = users.Count();
-
+            var total = await _userService.Count(queryParams);
+          //  var total = users.Count();
             var page = _mapper.Map<List<UserVO>>(users);
             if (page == null)
                 return ApiResult.Error("没有找到");
             return ApiResult.Success(new { total, queryParams.PageIndex, queryParams.PageSize, page });
         }
-      
-
-
     }
 }

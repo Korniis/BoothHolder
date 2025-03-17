@@ -8,7 +8,7 @@ namespace BoothHolder.Model.VO
 {
     public class UserVO
     {
-        public long? Id;
+        public long Id { get; set; }
         public string UserName { get; set; }  // 用户名
         public string? Email { get; set; }  // 邮箱
         public string? Phone { get; set; }  // 联系电话

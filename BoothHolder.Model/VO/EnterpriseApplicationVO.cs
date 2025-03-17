@@ -20,12 +20,11 @@ namespace BoothHolder.Model.VO
         /// <summary>
         /// 审核人附加评论（例如：审核过程中的附加意见）
         /// </summary>
-        public string? AuditComment { get; set; }
         /// <summary>
         /// 申请信息
         /// </summary
         public string? RemarkSupport { get; set; }
         public string ApplyUserName { get; set; }  // 申请人用户信息
-        public User ReviewedUserName { get; set; }  // 申请人用户信息
+        public string? ReviewedUserName { get; set; }  // 申请人用户信息
     }
 }

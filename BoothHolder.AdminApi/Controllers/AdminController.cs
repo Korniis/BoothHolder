@@ -46,7 +46,9 @@ namespace BoothHolder.AdminApi.Controllers
 
 
         }
+
         [HttpGet]
+        
         public async Task<ApiResult> UserInfo()
         {
             var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
