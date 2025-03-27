@@ -12,5 +12,6 @@ namespace BoothHolder.IService
         Task<List<Booth>> SelectByQuery(BoothQueryParams queryParams);
         Task<Booth> SelectFullByIdAsync(long id);
         Task<bool> UpdateBoothAsync(BoothDTO booth);
+        Task<Booth> GetByIdAsync(long boothId);
     }
 }

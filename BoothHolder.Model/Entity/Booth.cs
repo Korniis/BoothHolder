@@ -24,9 +24,12 @@ namespace BoothHolder.Model.Entity
         [SugarColumn(IsNullable = false)]
 
         public long BrandTypeId { get; set; } // 品牌类型
-        [SugarColumn(IsNullable = false)]
+        [SugarColumn]
 
-        public DateTime AvailableDate { get; set; } // 招租日期
+        public DateTime? AvailableDate { get; set; } // 招租日期
+
+        [SugarColumn(DefaultValue = "CURRENT_TIMESTAMP")]
+        public DateTime CreatedAt { get; set; } = DateTime.Now; // 招租日期
 
         [SugarColumn(IsNullable = true)]
         public string Description { get; set; } // 摊位描述

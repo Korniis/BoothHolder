@@ -35,5 +35,6 @@ namespace BoothHolder.Test
             Console.WriteLine($"UserName: {userDto.UserName}, Roles: {string.Join(", ", userDto.RoleNames)}");
 
         }
+
     }
 }

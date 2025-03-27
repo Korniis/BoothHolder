@@ -1,31 +1,30 @@
-﻿using BoothHolder.Common;
-using BoothHolder.Common.Configration;
+﻿using BoothHolder.Common.Configration;
 using BoothHolder.Common.Jwt;
+using BoothHolder.Common;
 using BoothHolder.IService;
 using BoothHolder.Model.DTO;
 using BoothHolder.Model.Entity;
 using BoothHolder.Repository;
 using MapsterMapper;
 using Newtonsoft.Json;
-using StackExchange.Redis;
 using System.Security.Claims;
+using StackExchange.Redis;
 
 namespace BoothHolder.Service
 {
-    public class AdminService : BaseService<User, UserDTO>, IAdminService
+    public class EnterpriseService : BaseService<User, UserDTO>, IEnterpriseService
     {
 
         private readonly IMapper _mapper;
         private readonly IUserRepository _userResposity;
         private readonly IBaseRepository<User> _baseRepository;
         private readonly string _redisPrefix = "EmailVerification:";
-        private readonly string __adminredistoken = "admintoken:";
-        private readonly string _adminDataRedis = "AdminDataPrefix";
+        private readonly string __enterpriseredistoken = "enterprisetoken:";
+        private readonly string _enterpriseDataRedis = "EnterprisePrefix";
 
         private readonly string _redisToken = "TokenVerification:";
         private readonly IDatabase _redisDatabase;
-
-        public AdminService(IConnectionMultiplexer connectionMultiplexer, IBaseRepository<User> repository, IMapper mapper, IUserRepository userResposity) : base(repository, mapper)
+        public EnterpriseService(IConnectionMultiplexer connectionMultiplexer, IBaseRepository<User> repository, IMapper mapper, IUserRepository userResposity) : base(repository, mapper)
         {
             _userResposity = userResposity;
             _mapper = mapper;
@@ -33,8 +32,6 @@ namespace BoothHolder.Service
             _redisDatabase = connectionMultiplexer.GetDatabase();
 
         }
-
-
 
         public async Task<string> GetToken(UserLoginDTO loginDTO)
         {
@@ -57,7 +54,7 @@ namespace BoothHolder.Service
             }
             var token = JwtHelper.CreateToken(claims);
             var expiresIn = Convert.ToInt32(AppSettings.app("JwtSettings:ClockSkewMinutes"));
-            await _redisDatabase.StringSetAsync(__adminredistoken + user.UserName, token, TimeSpan.FromMinutes(expiresIn));
+            await _redisDatabase.StringSetAsync(__enterpriseredistoken + user.UserName, token, TimeSpan.FromMinutes(expiresIn));
 
             return token;
         }
@@ -67,7 +64,7 @@ namespace BoothHolder.Service
             User user;
             string cacheKey = $"user:{userId}";
 
-            var cachedUserInfo = await _redisDatabase.StringGetAsync(_adminDataRedis + cacheKey);
+            var cachedUserInfo = await _redisDatabase.StringGetAsync(_enterpriseDataRedis + cacheKey);
 
 
             if (cachedUserInfo.HasValue)
@@ -82,7 +79,7 @@ namespace BoothHolder.Service
             }
             // 将用户数据序列化并存储到 Redis 中，设置过期时间（例如 1小时）
             if (user != null)
-                await _redisDatabase.StringSetAsync(_adminDataRedis + cacheKey,
+                await _redisDatabase.StringSetAsync(_enterpriseDataRedis + cacheKey,
                                                     JsonConvert.SerializeObject(user),
                                                     TimeSpan.FromHours(1));
 
@@ -91,4 +88,3 @@ namespace BoothHolder.Service
         }
     }
 }
-

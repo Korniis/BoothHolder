@@ -12,7 +12,7 @@ namespace BoothHolder.Repository
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public Task<int> CreateAsync(TEntity entity);
+        public Task<long> CreateAsync(TEntity entity);
         public Task<int> CreateAsync(List<TEntity> entities);
         /// <summary>
         /// 更新数据

@@ -43,6 +43,7 @@ namespace BoothHolder.Repository.Impl
         public async Task<List<User>> SelectAllWithQueryAsync(Expression<Func<User, bool>> predicate, int pageIndex, int pageSize)
         {
             return await _db.Queryable<User>().Includes(c=>c.RoleList).Where(predicate)
+                .OrderByDescending(u=>u.CreatedTime)
           .Skip(pageIndex * pageSize) // 跳过前面的记录
            .Take(pageSize) // 获取当前页的记录
            .ToListAsync();

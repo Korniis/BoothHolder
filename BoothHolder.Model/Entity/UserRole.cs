@@ -6,9 +6,9 @@ namespace BoothHolder.Model.Entity
     public class UserRole
     {
         [SugarColumn(IsPrimaryKey = true)]
-        public int UserID { get; set; }  // 用户ID
+        public long UserID { get; set; }  // 用户ID
 
         [SugarColumn(IsPrimaryKey = true)]
-        public int RoleID { get; set; }  // 角色ID
+        public long RoleID { get; set; }  // 角色ID
     }
 }

@@ -84,7 +84,7 @@ namespace BoothHolder.Service
                 upbooth.AvailableDate = booth.AvailableDate;
                 upbooth.Description = booth.Description;
                 upbooth.IsAvailable = (bool)booth.IsAvailable;
-                if(!upbooth.IsAvailable)
+                if (!upbooth.IsAvailable)
                 {
                     upbooth.UserId = null;
                 }
@@ -121,6 +121,11 @@ namespace BoothHolder.Service
         {
             return await _boothRepository.GetFullRevenue();
 
+        }
+
+        public async Task<Booth> GetByIdAsync(long boothId)
+        {
+            return await _boothRepository.SelectOneByIdAsync(boothId);
         }
     }
 }

@@ -13,6 +13,7 @@
         public string? Description { get; set; }
         public DateTime? CreatedTime { get; set; }
         public List<string>? RoleNames { get; set; }
+        public string? EnterpriseName { get; set; }
     }
     public class UserQueryParams
     {

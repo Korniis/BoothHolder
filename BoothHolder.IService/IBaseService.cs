@@ -7,7 +7,7 @@ namespace BoothHolder.IService
     public interface IBaseService<TEntity, TDto> where TEntity : class, new() where TDto : class, new()
     {
         // 插入
-        Task<int> CreateAsync(TDto dto);
+        Task<long> CreateAsync(TDto dto);
 
         // 删除
         Task<bool> DeleteAsync(TDto dto);

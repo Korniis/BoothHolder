@@ -23,8 +23,8 @@ namespace BoothHolder.AdminApi.Controllers
 
        
 
-        public AdminController(IUserService userService, IAdminService adminService)
-        {
+        public AdminController(IUserService userService, IAdminService adminService) {
+        
             _userService = userService;
             _adminService = adminService;
         }

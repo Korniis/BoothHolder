@@ -12,9 +12,9 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     }
 
     // 插入
-    public async Task<int> CreateAsync(TEntity entity)
+    public async Task<long> CreateAsync(TEntity entity)
     {
-        return await _db.Insertable(entity).ExecuteCommandAsync();
+        return await _db.Insertable(entity).ExecuteReturnBigIdentityAsync();
     }
     public async Task<int> CreateAsync(List<TEntity> entities)
     {

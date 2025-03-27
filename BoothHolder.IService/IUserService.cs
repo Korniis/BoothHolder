@@ -16,6 +16,7 @@ namespace BoothHolder.IService
         Task<bool> AddEvevt(int userId, long evevtId);
         Task<List<User>> SelectByQuery(UserQueryParams queryParams);
         Task<long> Count(UserQueryParams queryParams);
+        Task<string> GetUserEnterprise(int userId);
 
         // Task<RegisterStatus> CreateAdminAsync(UserRegisterDTO userRegisterDTO);
     }

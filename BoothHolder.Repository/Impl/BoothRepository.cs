@@ -38,6 +38,7 @@ namespace BoothHolder.Repository.Impl
 
 
             return await _db.Queryable<Booth>().Includes(u=>u.User).Includes(x => x.BrandType).Where(it => !it.IsDeleted).Where(predicate)
+                .OrderByDescending(b=>b.AvailableDate)
                  .Skip(pageIndex * pageSize) // 跳过前面的记录
                   .Take(pageSize) // 获取当前页的记录
                   .ToListAsync();
@@ -48,5 +49,17 @@ namespace BoothHolder.Repository.Impl
 
             return await _db.Queryable<Booth>().Includes(x => x.BrandType).InSingleAsync(id);
         }
+
+        public async Task<int> UpdateOnReservation(long boothid,long userId)
+        {
+            return await _db.Updateable<Booth>().Where(b => b.Id == boothid).SetColumns(b => new Booth
+            {
+                IsAvailable = false,
+                UserId = userId,
+
+            }).ExecuteCommandAsync();
+        }
+
+    
     }
 }

@@ -5,13 +5,10 @@ using BoothHolder.IService;
 using BoothHolder.Model.DTO;
 using BoothHolder.Model.Entity;
 using BoothHolder.Repository;
-using BoothHolder.Repository.Impl;
 using MapsterMapper;
 using Microsoft.IdentityModel.Tokens;
 using SqlSugar;
 using StackExchange.Redis;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using Role = BoothHolder.Model.Entity.Role;
@@ -25,6 +22,7 @@ namespace BoothHolder.Service
         private readonly IBaseRepository<Role> _roleRepository;
         private readonly IBaseRepository<UserRole> _userroleRepository;
         private readonly IBaseRepository<EventUser> _eventUserRepository;
+        private readonly IBaseRepository<EnterpriseApplication> _enterpriseApplication;
         private readonly IDatabase _redisDatabase;
         private readonly string _redisPrefix = "EmailVerification:";
         private readonly string _userredistoken = "usertoken:";
@@ -35,7 +33,8 @@ namespace BoothHolder.Service
             IBaseRepository<UserRole> userroleRepository,
             IMapper mapper,
             IConnectionMultiplexer connectionMultiplexer,
-            IBaseRepository<EventUser> eventUserRepository) : base(repository, mapper) // 调用 BaseService 的构造函数
+            IBaseRepository<EventUser> eventUserRepository,
+            IBaseRepository<EnterpriseApplication> enterpriseApplication) : base(repository, mapper) // 调用 BaseService 的构造函数
         {
             _userRespository = userResposity;
             _roleRepository = roleRepository;
@@ -44,6 +43,7 @@ namespace BoothHolder.Service
             _userroleRepository = userroleRepository;
             _redisDatabase = connectionMultiplexer.GetDatabase();
             _eventUserRepository = eventUserRepository;
+            _enterpriseApplication = enterpriseApplication;
         }
         public async Task<List<RoleDTO>> GetRoles()
         {
@@ -210,7 +210,7 @@ namespace BoothHolder.Service
             }
 
             return users;
-         
+
         }
 
         public async Task<long> Count(UserQueryParams queryParams)
@@ -247,7 +247,7 @@ namespace BoothHolder.Service
                 //}
 
                 // 使用 SQLSugar 执行查询
-                var totalCount = await _userRespository. GetCountAsync(sql, parameters);
+                var totalCount = await _userRespository.GetCountAsync(sql, parameters);
 
                 return totalCount;
             }
@@ -267,7 +267,13 @@ namespace BoothHolder.Service
 
         }
 
-   
+        public async Task<string> GetUserEnterprise(int userId)
+        {
+            var user = await _enterpriseApplication.SelectOneAsync(it => it.UserId == userId);
+            return user.EnterpriseName;
+        }
+
+
 
         //public async  Task<RegisterStatus> CreateAdminAsync(UserRegisterDTO userRegisterDTO)
         //{

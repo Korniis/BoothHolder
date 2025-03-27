@@ -19,7 +19,7 @@ namespace BoothHolder.Service
         }
 
         // 插入
-        public async Task<int> CreateAsync(TDto dto)
+        public async Task<long> CreateAsync(TDto dto)
         {
             var entity = _mapper.Map<TEntity>(dto);
             return await _repository.CreateAsync(entity);

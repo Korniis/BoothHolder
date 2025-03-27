@@ -34,6 +34,7 @@ namespace BoothHolder.Model.Entity
         public List<Event> EventList { get; set; }//只能是null不能赋默认值
         [Navigate(NavigateType.OneToMany, nameof(Booth.UserId))] // 一对多导航
         public List<Booth> Booths { get; set; }
+      
     }
 
 

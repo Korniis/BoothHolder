@@ -2,6 +2,7 @@
 using BoothHolder.IService;
 using BoothHolder.Model.DTO;
 using BoothHolder.Model.Entity;
+using BoothHolder.Model.VO;
 using BoothHolder.Service;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -114,6 +115,7 @@ namespace BoothHolder.UserApi.Controllers
         public async Task<ApiResult> UserMoreinfo()
         {
             var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+          
             string cacheKey = $"user:{userId}";
             User user = null;
             var cachedUserInfo = await _redisDatabase.StringGetAsync(_userDataRedis + cacheKey);
@@ -127,6 +129,7 @@ namespace BoothHolder.UserApi.Controllers
             else
             {
                 user = await _userService.SelectOneByIdAsync(userId);
+               
             }
             if (user != null)
             {
@@ -140,6 +143,14 @@ namespace BoothHolder.UserApi.Controllers
                 return ApiResult.Error("无该用户");
             }
 
+        }
+        [HttpGet]
+        [Authorize]
+         public async Task<ApiResult> GetUserEnterprise()
+        {
+            var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
+           return ApiResult.Success( await _userService.GetUserEnterprise(userId));
         }
         [HttpPost]
         public async Task<ApiResult> Login(UserLoginDTO loginDTO)
