@@ -1,4 +1,5 @@
 ﻿using BoothHolder.Model.Entity;
+using BoothHolder.Model.VO;
 using SqlSugar;
 using System.Linq.Expressions;
 
@@ -50,9 +51,9 @@ namespace BoothHolder.Repository.Impl
             return await _db.Queryable<Booth>().Includes(x => x.BrandType).InSingleAsync(id);
         }
 
-        public async Task<int> UpdateOnReservation(long boothid,long userId)
+        public async Task<int> UpdateOnReservation(long boothId,long userId)
         {
-            return await _db.Updateable<Booth>().Where(b => b.Id == boothid).SetColumns(b => new Booth
+            return await _db.Updateable<Booth>().Where(b => b.Id == boothId).SetColumns(b => new Booth
             {
                 IsAvailable = false,
                 UserId = userId,
@@ -60,6 +61,16 @@ namespace BoothHolder.Repository.Impl
             }).ExecuteCommandAsync();
         }
 
-    
+ 
+
+        public async Task<int> UpdateInfoAsync(long boothId, string v1, string? v2)
+        {
+              return await _db.Updateable<Booth>().Where(b => b.Id == boothId).SetColumns(b => new Booth
+            {
+                BoothName = v1,
+                Description = v2,
+
+            }).ExecuteCommandAsync();
+        }
     }
 }

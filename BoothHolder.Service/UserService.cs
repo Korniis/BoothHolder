@@ -270,6 +270,8 @@ namespace BoothHolder.Service
         public async Task<string> GetUserEnterprise(int userId)
         {
             var user = await _enterpriseApplication.SelectOneAsync(it => it.UserId == userId);
+            if (user == null)
+                return "暂无企业";
             return user.EnterpriseName;
         }
 

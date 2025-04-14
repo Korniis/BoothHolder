@@ -52,7 +52,9 @@ namespace BoothHolder.EnterpriseApi.Controllers
         [Authorize]
         public async Task<ApiResult> RequestReservation([FromBody] ReservationRequestDTO request)
         {
+            //long userId = request.UserId;
             long userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+
             request.UserId = userId;
             try
             {
@@ -95,19 +97,34 @@ namespace BoothHolder.EnterpriseApi.Controllers
             }
         }
         [HttpGet]
-        public async Task<ApiResult> CountPayments(long userId)
-        { 
-            var pay=  await _reservationService.CountPayments(userId);
+        [Authorize]
+
+        public async Task<ApiResult> CountPayments()
+        {
+            long userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var pay = await _reservationService.CountPayments(userId);
             return ApiResult.Success(pay);
         }
-     /*   [HttpPost]
+        [HttpPost]
         [Authorize]
         public async Task<ApiResult> RemoveReservation()
         {
             long userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
 
 
-            
-        }*/
+
+
+
+            int stuat = await _reservationService.RemoveReservationAsync(userId);
+            if (stuat == 0)
+            {
+                return ApiResult.Error("您无预定");
+            }
+
+
+            return ApiResult.Success("取消成功");
+
+
+        }
     }
 }

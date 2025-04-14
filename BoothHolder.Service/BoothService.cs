@@ -127,5 +127,10 @@ namespace BoothHolder.Service
         {
             return await _boothRepository.SelectOneByIdAsync(boothId);
         }
+
+   
+
+        public async Task<int> UpdateBoothInfoAsync(long boothId, string v1, string? v2)=> await _boothRepository.UpdateInfoAsync(boothId , v1, v2);
+
     }
 }

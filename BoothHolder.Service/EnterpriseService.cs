@@ -38,7 +38,7 @@ namespace BoothHolder.Service
             var user = await _userResposity.SelectOneWithRoleAsync(x => x.UserName == loginDTO.Username);
             var password = MD5Helper.GetMD5(loginDTO.Password);
             // 如果用户不存在，抛出异常
-            if (user == null || password != user.PasswordHash || !user.RoleList.Any(r => r.RoleID == 1)) return null;
+            if (user == null || password != user.PasswordHash || !user.RoleList.Any(r => r.RoleID == 3)) return null;
 
             // 创建用户声明（Claims），包含用户名、邮箱和角色
             var claims = new List<Claim>

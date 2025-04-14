@@ -13,5 +13,6 @@ namespace BoothHolder.IService
         Task<Booth> SelectFullByIdAsync(long id);
         Task<bool> UpdateBoothAsync(BoothDTO booth);
         Task<Booth> GetByIdAsync(long boothId);
+        Task<int> UpdateBoothInfoAsync(long boothId, string v1, string? v2);
     }
 }

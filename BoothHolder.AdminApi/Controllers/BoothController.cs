@@ -57,7 +57,7 @@ namespace BoothHolder.AdminApi.Controllers
 
         [HttpPost]
         public async Task<ApiResult> CreateBooth([FromBody] BoothDTO booth)
-        {
+         {
             if (booth == null)
             {
                 return ApiResult.Error("");

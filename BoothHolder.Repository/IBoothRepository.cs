@@ -12,5 +12,6 @@ namespace BoothHolder.Repository
         Task<List<Booth>> SelectAllWithBrandTypeAsync(Expression<Func<Booth, bool>> predicate, int pageIndex, int pageSize);
         Task<Booth> SelectFullByIdAsync(long id);
         Task<int> UpdateOnReservation(long boothId, long userId);
+        Task<int> UpdateInfoAsync(long boothId, string v1, string? v2);
     }
 }

@@ -28,7 +28,7 @@ namespace BoothHolder.Model.DTO
         public string Phone { get; set; }
 
         [StringLength(500, ErrorMessage = "备注长度不能超过500个字符")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
     public enum ReservationStatus
     {

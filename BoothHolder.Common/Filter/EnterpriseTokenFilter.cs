@@ -30,7 +30,7 @@ namespace BoothHolder.Common.Filter
             if (authorizeAttribute == null || allowAnonymousAttribute != null)
             {
                 await next();
-                return;
+                return; 
             }
             // 获取请求头中的 token
             var token = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault();
@@ -84,7 +84,7 @@ namespace BoothHolder.Common.Filter
 
             var userNameClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name);
             var redistoken = await _database.StringGetAsync(_enterpriseredistoken + userNameClaim.Value);
-
+             
             if (actualToken.Equals(redistoken)) return true;
 
             return false;
