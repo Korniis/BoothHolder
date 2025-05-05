@@ -49,7 +49,6 @@ namespace BoothHolder.Service
         public Expression<Func<Booth, bool>> GetPredicate(BoothQueryParams queryParams)
         {
             var predicate = Expressionable.Create<Booth>()
-                .AndIF(queryParams.IsAvailable, it => !it.IsDeleted)
                 .AndIF(!string.IsNullOrEmpty(queryParams.BoothName), it => it.BoothName.Contains(queryParams.BoothName))
                 .AndIF(!string.IsNullOrEmpty(queryParams.Location), it => it.Location.Contains(queryParams.Location))
                 .AndIF(queryParams.BrandType.HasValue, it => it.BrandTypeId == queryParams.BrandType) // 假设BrandType存储在Description中
@@ -57,7 +56,9 @@ namespace BoothHolder.Service
                 .AndIF(queryParams.MaxPrice.HasValue, it => it.DailyRate <= queryParams.MaxPrice)
                 .AndIF(queryParams.RentalStartDate.HasValue, it => it.AvailableDate >= queryParams.RentalStartDate)
                 .AndIF(queryParams.RentalEndDate.HasValue, it => it.AvailableDate <= queryParams.RentalEndDate)
-                .AndIF(queryParams.IsAvailable, it => it.IsAvailable)
+                .AndIF(queryParams.IsAvailable.HasValue, it => it.IsAvailable==queryParams.IsAvailable)
+               // .And( it => it.IsDeleted==queryParams.IsDeleted)
+
                 .ToExpression(); // 生成最终的表达式
             return predicate;
 

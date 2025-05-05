@@ -18,10 +18,10 @@
         public string? BoothName { get; set; }  // 可为空
         public string? Location { get; set; }    // 可为空
         public int? BrandType { get; set; }   // 可为空
-
-        public bool IsAvailable { get; set; } = false;
+       // public bool IsFull { get; set; } = true;
+        public bool? IsAvailable { get; set; } 
         public bool IsDesc { get; set; } = false;
-
+        public bool? IsDeleted { get; set; }
         public decimal? MinPrice { get; set; }  // 可为空
         public decimal? MaxPrice { get; set; }  // 可为空
         public DateTime? RentalStartDate { get; set; }  // 可为空

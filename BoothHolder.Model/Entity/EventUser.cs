@@ -5,6 +5,7 @@ namespace BoothHolder.Model.Entity
     [SugarTable("t_eventuser")]
     public class EventUser
     {
+
         [SugarColumn(IsPrimaryKey = true)]
         public long UserID { get; set; }  // 用户ID
 

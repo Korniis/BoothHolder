@@ -183,8 +183,8 @@ namespace BoothHolder.Service
             EventUser eventUser = new EventUser();
             eventUser.EventID = evevtId;
             eventUser.UserID = userId;
-            return await _eventUserRepository.CreateAsync(eventUser) != 0 ? true : false;
-
+            var k= await _eventUserRepository.CreateAsync(eventUser) ;
+             return true;
         }
 
         public async Task<List<User>> SelectByQuery(UserQueryParams queryParams)

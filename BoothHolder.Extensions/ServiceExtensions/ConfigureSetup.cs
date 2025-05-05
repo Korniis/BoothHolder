@@ -40,6 +40,8 @@ namespace BoothHolder.Extensions.ServiceExtensions
               .Map(dest => dest.RoleNames, src => src.RoleList.Select(r => r.RoleName));
             config.NewConfig<EnterpriseApplication, EnterpriseApplicationVO>()
                .Map(dest => dest.ApplyUserName, src => src.ApplyUser.UserName).Map(dest => dest.ReviewedUserName, src => src.ReviewedUser.UserName);
+            config.NewConfig<Comment, CommentVO>().Map(dest => dest.UserName, src => src.CommentUser.UserName).Map(dest=>dest.AvatarUrl,src=>src.CommentUser.AvatarUrl);
+            
             services.AddSingleton(config);
             services.AddScoped<IMapper, ServiceMapper>();
 

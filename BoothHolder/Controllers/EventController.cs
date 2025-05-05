@@ -42,5 +42,6 @@ namespace BoothHolder.UserApi.Controllers
             return ApiResult.Success(user.EventList);
 
         }
+
     }
 }

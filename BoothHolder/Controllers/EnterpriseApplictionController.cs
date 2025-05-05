@@ -2,6 +2,8 @@
 using BoothHolder.IService;
 using BoothHolder.Model.DTO;
 using BoothHolder.Model.Entity;
+using BoothHolder.Model.VO;
+using BoothHolder.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +16,12 @@ namespace BoothHolder.UserApi.Controllers
     public class EnterpriseApplictionController : ControllerBase
     {
         private readonly IEnterpriseApplicationService _enterpriseApplicationService;
+        private readonly IBoothService _boothService;
 
-        public EnterpriseApplictionController(IEnterpriseApplicationService enterpriseApplicationService)
+        public EnterpriseApplictionController(IEnterpriseApplicationService enterpriseApplicationService, IBoothService boothService)
         {
             _enterpriseApplicationService = enterpriseApplicationService;
+            _boothService = boothService;
         }
 
         [HttpPost]
@@ -57,7 +61,22 @@ namespace BoothHolder.UserApi.Controllers
             var userId = Convert.ToInt32(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
             EnterpriseApplication    application= await _enterpriseApplicationService.SelectOneByUserIdAsync(userId);
             if (application == null) return ApiResult.NotFound("未找到");
-            return ApiResult.Success(new {application.Status,application.EnterpriseName,application.ContactPhone,application.RemarkSupport });
+            return ApiResult.Success(new {application.UserId, application.Status,application.EnterpriseName,application.ContactPhone,application.RemarkSupport });
+        }
+        [HttpGet]
+        
+        public async Task<ApiResult> GetApplicationByBoothId(long boothId)
+        {
+
+            var booth = await _boothService.SelectOneByIdAsync(boothId);
+
+
+            if (booth.UserId == null)
+                return ApiResult.Error("此摊位无人预定");
+            EnterpriseApplication application = await _enterpriseApplicationService.SelectOneByUserIdAsync((long)booth.UserId);
+
+            if (application == null) return ApiResult.NotFound("未找到");
+            return ApiResult.Success(new { application.UserId, application.Status, application.EnterpriseName, application.ContactPhone, application.RemarkSupport });
         }
     }
 }

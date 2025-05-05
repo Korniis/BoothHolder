@@ -67,7 +67,7 @@ namespace BoothHolder.EnterpriseApi.Controllers
                 await _boothService.UpdateBoothInfoAsync(
                     activeReservation.BoothId,
                     request.BoothName.Trim(),
-                    request.BoothDes?.Trim());
+                    request.BoothDescription?.Trim());
 
                 // 5. Return proper API result
                 return Ok(ApiResult.Success("摊位信息更新成功"));
@@ -87,6 +87,6 @@ namespace BoothHolder.EnterpriseApi.Controllers
         public string BoothName { get; set; }
 
         [StringLength(500, ErrorMessage = "摊位描述长度不能超过500个字符")]
-        public string BoothDes { get; set; }
+        public string BoothDescription { get; set; }
     }
 }

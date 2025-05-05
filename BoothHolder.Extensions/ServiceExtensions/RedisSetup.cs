@@ -14,7 +14,7 @@ namespace BoothHolder.Extensions.ServiceExtensions
                 string redisConnectionString = AppSettings.app("Redis:ConnectionString") ?? "localhost:6379";
 
                 services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
-
+                Console.WriteLine();
             }
             else
             {
