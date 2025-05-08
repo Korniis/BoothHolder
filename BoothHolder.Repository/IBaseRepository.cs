@@ -31,6 +31,7 @@ namespace BoothHolder.Repository
         /// </summary>
         /// <returns></returns>
         public Task<List<TEntity>> SelectAllAsync();
+        public List<TEntity> SelectAllObj();
         /// <summary>
         /// 根据id查找
         /// </summary>

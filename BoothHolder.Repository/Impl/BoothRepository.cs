@@ -72,5 +72,10 @@ namespace BoothHolder.Repository.Impl
 
             }).ExecuteCommandAsync();
         }
+
+        public  List<Booth> SelectFullToAi()
+        {
+            return  _db.Queryable<Booth>().Where(x => !x.IsAvailable).Includes(x=>x.User).Includes(x => x.BrandType).ToList();
+        }
     }
 }

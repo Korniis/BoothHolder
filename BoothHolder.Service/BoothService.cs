@@ -1,8 +1,10 @@
 ﻿using BoothHolder.IService;
 using BoothHolder.Model.DTO;
 using BoothHolder.Model.Entity;
+using BoothHolder.Model.VO;
 using BoothHolder.Repository;
 using MapsterMapper;
+using Newtonsoft.Json;
 using SqlSugar;
 using System.Linq.Expressions;
 
@@ -12,16 +14,17 @@ namespace BoothHolder.Service
     {
         private readonly IBoothRepository _boothRepository;
         private readonly IBaseRepository<Booth> _baseRepository;
+        private readonly IEnterpriseApplicationRepository _enterpriseApplicationRepository;
         private readonly IMapper _mapper;
 
 
 
-        public BoothService(IBaseRepository<Booth> baseRepository, IMapper mapper, IBoothRepository boothRepository) : base(baseRepository, mapper)
+        public BoothService(IBaseRepository<Booth> baseRepository, IMapper mapper, IBoothRepository boothRepository, IEnterpriseApplicationRepository enterpriseApplicationRepository) : base(baseRepository, mapper)
         {
             _boothRepository = boothRepository;
             _baseRepository = baseRepository;
             _mapper = mapper;
-
+            _enterpriseApplicationRepository = enterpriseApplicationRepository;
         }
 
         public async Task<long> Count(BoothQueryParams queryParams)
@@ -133,5 +136,25 @@ namespace BoothHolder.Service
 
         public async Task<int> UpdateBoothInfoAsync(long boothId, string v1, string? v2)=> await _boothRepository.UpdateInfoAsync(boothId , v1, v2);
 
+        public string GetAiInfo()
+        {
+            List<Booth> booths = _boothRepository.SelectFullToAi();
+             var  enterprises =  _enterpriseApplicationRepository.SelectAllObj();
+            var boothinfo = booths.Select(x => new
+            {
+                x.Id,
+                x.Location,
+                x.BoothName,
+                x.Description,
+                UserDescription = x.User.Description,
+                x.User.Email,
+                UserId = x.User.Id,
+                x.User.UserName,
+                EnterpriseDes = enterprises.FirstOrDefault(e => e.UserId == x.User.Id)?.RemarkSupport
+            });
+
+            string info =  JsonConvert.SerializeObject(boothinfo);
+                return info;
+        }
     }
 }

@@ -41,7 +41,10 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     {
         return await _db.Queryable<TEntity>().ToListAsync();
     }
-
+    public  List<TEntity> SelectAllObj()
+    {
+        return  _db.Queryable<TEntity>().ToList();
+    }
     // 根据 ID 查询单条记录
     public async Task<TEntity> SelectOneByIdAsync(long id)
     {

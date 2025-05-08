@@ -14,5 +14,7 @@ namespace BoothHolder.IService
         Task<bool> UpdateBoothAsync(BoothDTO booth);
         Task<Booth> GetByIdAsync(long boothId);
         Task<int> UpdateBoothInfoAsync(long boothId, string v1, string? v2);
+
+        string GetAiInfo();
     }
 }

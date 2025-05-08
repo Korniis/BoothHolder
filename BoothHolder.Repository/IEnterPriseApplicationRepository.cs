@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BoothHolder.Repository
 {
-    public interface IEnterpriseApplicationRepository
+    public interface IEnterpriseApplicationRepository : IBaseRepository<EnterpriseApplication>
     {
         Task<int> ApplyEnterpriseAsync(EnterpriseApplication application);
         Task<long> CountAsync(Expression<Func<EnterpriseApplication, bool>> predicate);

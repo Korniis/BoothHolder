@@ -2,6 +2,7 @@ using BoothHolder.Common.Configration;
 using BoothHolder.Common.Filter;
 using BoothHolder.Extensions.Buliderextensions;
 using BoothHolder.Extensions.ServiceExtensions;
+using BoothHolder.UserApi.ChatRoom;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 namespace BoothHolder.UserApi
@@ -48,8 +49,14 @@ namespace BoothHolder.UserApi
             builder.Services.AddRepositorits();
 
 
+
+
+            builder.Services.AddSignalR();
+            builder.Services.AddScoped<ChatHub>();
+
             Log.Debug(AppSettings.app("Database:MySql:ConnectionString"));
             Console.WriteLine(AppSettings.app<string>("JwtSettings"));
+
             builder.Services.AddDbSetup();
             builder.Services.AddAuth();
             builder.Services.AddRedis();
@@ -82,6 +89,7 @@ namespace BoothHolder.UserApi
             app.UseAuthentication();   //хож╓
 
             app.UseAuthorization();
+            app.MapHub<ChatHub>("/chatHub");
             app.MapControllers();
 
             app.Run();

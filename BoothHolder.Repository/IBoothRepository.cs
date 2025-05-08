@@ -13,5 +13,6 @@ namespace BoothHolder.Repository
         Task<Booth> SelectFullByIdAsync(long id);
         Task<int> UpdateOnReservation(long boothId, long userId);
         Task<int> UpdateInfoAsync(long boothId, string v1, string? v2);
+        List<Booth> SelectFullToAi();
     }
 }
